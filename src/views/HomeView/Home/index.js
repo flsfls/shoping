@@ -2,11 +2,13 @@ import React from 'react';
 import { TabBar } from 'antd-mobile';
 import { Route, Link } from 'react-router-dom';
 import CustomIcon from '@components/CustomIcon'; // eslint-disable-line
+import SlideBar from './component/slideBar';
 import ShopCard from '../ShopCard';
 import Header from './component/header';
 import OrderGoods from './component/orderGoods';
 import Classification from '../classification';
 import './assets/style.less';
+import './assets/index.less';
 // import { inject, observer } from 'mobx-react';
 // import PropTypes from 'prop-types';
 
@@ -15,12 +17,17 @@ class Home extends React.Component {
     super(props);
     this.state = {
       selectedTab: 'goodOrder',
+      open: false,
       hidden: false,
     };
   }
 
   componentWillMount() {
     // will
+  }
+
+  onOpenChange = () => {
+    this.setState({ open: !this.state.open });
   }
 
   renderContent = (pageText) => {
@@ -33,9 +40,10 @@ class Home extends React.Component {
   }
 
   render() {
+    const { open } = this.state;
     return (
       <div className="inner_body home">
-        <Header />
+        <Header onOpenChange={this.onOpenChange} />
         <div
           ref={(node) => { this.scrollnode = node; }}
           className="scroll_body home_container"
@@ -130,6 +138,10 @@ class Home extends React.Component {
             </TabBar.Item>
           </TabBar>
         </div>
+        <SlideBar
+          open={open}
+          onOpenChange={this.onOpenChange}
+        />
         <Route path="/home/shopCard" component={ShopCard} />
         <Route path="/home/classification" component={Classification} />
       </div>

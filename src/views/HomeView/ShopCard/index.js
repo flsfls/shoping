@@ -12,13 +12,42 @@ import './assets/style.less';
   goodStore: store.goodStore,
 })) @observer
 class ShopCard extends Component {
-  componentDidMount() {
-    // willdid
+  componentWillMount() {
+    const { goodListStore } = this.props.goodStore;
+    const groupGood = goodListStore.toJS().reduce((box, next) => {
+      const item = next;
+      item.check = true;
+      const { shopName, shopId } = item;
+      const obj = {
+        shopName,
+        shopId,
+        check: true,
+        material: [item],
+      };
+      if (box.length === 0) {
+        box.push(obj);
+      } else {
+        for (let i = 0; i < box.length; i += 1) {
+          if (box[i].shopId === item.shopId) {
+            const materialItem = box[i].material;
+            materialItem.push(item);
+            return box;
+          }
+        }
+        box.push(obj);
+        return box;
+      }
+      return box;
+    }, []);
+    this.props.goodStore.addGroupStore(groupGood);
+  }
+
+  componentWillUnmount() {
+    this.props.goodStore.comparsionGoodList();
   }
 
   render() {
-    const { goodStore } = this.props.goodStore;
-    console.log(goodStore.toJS());
+    const { groupStore } = this.props.goodStore;
     return (
       <div className="inner_body shopcard">
         <HomeNavBar
@@ -27,7 +56,13 @@ class ShopCard extends Component {
         />
         <div className="scroll_body">
           {
-            goodStore.toJS().map(item => <CardList item={item} key={item.supId} />)
+            groupStore.toJS().map((item, outIndex) => (
+              <CardList
+                shopItem={item}
+                outIndex={outIndex}
+                key={item.shopId}
+              />
+            ))
           }
         </div>
         <TotalButton />

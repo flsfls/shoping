@@ -1,213 +1,44 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PropTypes from 'prop-types';
 import Bscroll from 'better-scroll';
+import HomeNavBar from '@components/NavBar';  // eslint-disable-line
+import ClassfiItem from './component/classfiItem';
+import { get } from '@util/http' // eslint-disable-line
 import './assets/style.less';
 
+@inject(store => ({
+  goodStore: store.goodStore,
+})) @observer
 class Classification extends React.Component {
+  constructor(props) {
+    super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
   state = {
-    list: [],
     currentIndex: 0,
   }
+
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({
-        list: [
-          {
-            name: '饭类',
-            inlist: [
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-            ],
-          },
-          {
-            name: '饭类',
-            inlist: [
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-            ],
-          },
-          {
-            name: '饭类',
-            inlist: [
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-            ],
-          },
-          {
-            name: '饭类',
-            inlist: [
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-            ],
-          },
-          {
-            name: '饭类',
-            inlist: [
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-            ],
-          },
-          {
-            name: '饭类',
-            inlist: [
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-            ],
-          },
-          {
-            name: '饭类',
-            inlist: [
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-            ],
-          }, {
-            name: '饭类',
-            inlist: [
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-            ],
-          },
-          {
-            name: '饭类',
-            inlist: [
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-            ],
-          },
-          {
-            name: '饭类',
-            inlist: [
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-            ],
-          },
-          {
-            name: '饭类',
-            inlist: [
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-              { name: '大米饭' },
-              { name: '小米饭' },
-            ],
-          },
-        ],
-      });
+    const { shopId } = this.props.location.state;
+    get('api/shop/getClassfiShop', { shopId }).then(({ data }) => {
+      this.props.goodStore.addClassfiStore(data);
       this.calculateHeight();
       this.initScroll();
-    }, 1000);
+    });
+  }
+
+  componentWillUnmount() {
+    this.foodScroll.destroy();
+    this.props.goodStore.cleanClassfiStore();
+    this.props.goodStore.comparsionGoodList();
   }
 
   selectMenu = (index) => {
     const foodList = this.food.getElementsByClassName('food-list-hook');
     const height = foodList[index];
-    console.log(height);
     this.foodScroll.scrollToElement(height, 300);
   }
 
@@ -223,7 +54,7 @@ class Classification extends React.Component {
     });
     this.foodScroll.on('scroll', (pos) => {
       this.scrollY = Math.abs(Math.round(pos.y));
-      for (let i = 0; i < this.listHeight.length; i++) {// eslint-disable-line
+      for (let i = 0; i < this.listHeight.length; i += 1) {
         const height1 = this.listHeight[i];
         const height2 = this.listHeight[i + 1];
         if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
@@ -254,7 +85,7 @@ class Classification extends React.Component {
     const foodList = this.food.getElementsByClassName('food-list-hook');
     let height = 0;
     this.listHeight.push(height);
-    for (let i = 0; i < foodList.length; i++) { // eslint-disable-line
+    for (let i = 0; i < foodList.length; i += 1) {
       const item = foodList[i];
       height += item.clientHeight;
       this.listHeight.push(height);
@@ -262,20 +93,34 @@ class Classification extends React.Component {
   }
 
   render() {
-    const { list } = this.state;
-    const leftlist = list.map(i => i.name);
+    console.log('1');
+    const { classfiStore } = this.props.goodStore;
+    const meunList = classfiStore.toJS().map(i => ({
+      classifId: i.classifId,
+      classifName: i.classifName,
+    }));
+    const { currentIndex } = this.state;
     return (
       <div className="inner_body classification ">
+        <HomeNavBar
+          title="商品分类"
+          path="/home"
+        />
         <div className="menu_wrap" ref={(menu) => { this.menu = menu; }}>
           <ul>
             {
-              leftlist.map((item, index) => (
+              meunList.map((item, index) => (
                 <li
+                  key={item.classifId}
                   className="meun-list-hook"
                   onClick={() => this.selectMenu(index)}
-                  style={{ background: index === this.state.currentIndex ? 'blue' : '#fff' }}
+                  style={{
+                    background: index === currentIndex ? '#fff' : '#FAFAFA',
+                    borderLeft: index === currentIndex ? '3px solid #FF6050' : '0 solid #FF6050',
+                    borderRight: index === currentIndex ? '1px solid #fff' : '0 solid #FF6050',
+                  }}
                 >
-                  {item}
+                  <span>{item.classifName}</span>
                 </li>
               ))
             }
@@ -284,14 +129,18 @@ class Classification extends React.Component {
         <div className="foods_wrap" ref={(food) => { this.food = food; }}>
           <ul>
             {
-              list.map(item => (
-                <li className="warp_li food-list-hook">
-                  <p style={{ height: '.77rem', background: 'green' }}>{item.name}</p>
-                  <ul>
-                    {item.inlist.map(initem => (
-                      <li className="innerLi" onClick={this.foodHandler}>
-                        {initem.name}
-                      </li>
+              classfiStore.toJS().map((item, outIndex) => (
+                <li className="warp_li food-list-hook" key={item.classifId} >
+                  <p className="classfi_name">{item.classifName}</p>
+                  <ul className="classfi_item_box">
+                    {item.material.map((material, innerIndex) => (
+                      <div key={material._id}>
+                        <ClassfiItem
+                          material={material}
+                          outIndex={outIndex}
+                          innerIndex={innerIndex}
+                        />
+                      </div>
                     ))}
                   </ul>
                 </li>
@@ -303,5 +152,17 @@ class Classification extends React.Component {
     );
   }
 }
+
+
+Classification.wrappedComponent.propTypes = {
+  goodStore: PropTypes.object.isRequired,
+};
+Classification.propTypes = {
+  location: PropTypes.object,
+};
+
+Classification.defaultProps = {
+  location: {},
+};
 
 export default Classification;

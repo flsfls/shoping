@@ -13,27 +13,32 @@ class CardList extends React.Component {
     // will did
   }
 
+  changeGood = (good, flag, outIndex, innerIndex) => {
+    this.props.goodStore.changeGoodListStore(good, flag);
+    // console.log(outIndex, innerIndex);
+    this.props.goodStore.changeGroupStoreCount(outIndex, innerIndex, flag);
+  }
+
   render() {
+    const { shopItem, outIndex } = this.props;
     const {
-      supName,
-      supId,
+      shopName,
       check,
       material,
-    } = this.props.item;
-    console.log(check);
+    } = shopItem;
     return (
       <div className="cardList">
         <div className="list_header">
           <div className="flex_lr_fs_c list_inner">
             <Checkbox
               checked={check}
-              onChange={e => this.props.goodStore.warpCheck(e, supId)}
+              onChange={e => this.props.goodStore.warpCheck(e, outIndex)}
             />
-            <p>{supName}</p>
+            <p>{shopName}</p>
           </div>
         </div>
         {
-          material.map((item, index) => {
+          material.map((materialItem, innerIndex) => {
             const {
               name,
               _id,
@@ -41,12 +46,12 @@ class CardList extends React.Component {
               until,
               count,
               check,
-            } = item;
+            } = materialItem;
             return (
               <div className="flex_lr_fs_c list_info" key={_id} >
                 <Checkbox
                   checked={check}
-                  onChange={e => this.props.goodStore.innerCheck(e, supId, _id)}
+                  onChange={e => this.props.goodStore.innerCheck(e, outIndex, innerIndex)}
                 />
                 <div className="flex_lr_fs_c info_item">
                   <img src={pic} alt="" />
@@ -56,8 +61,8 @@ class CardList extends React.Component {
                       <p>${money}/{until}</p>
                       <ARButton
                         count={count}
-                        index={index}
-                        item={item}
+                        addFunc={() => this.changeGood(materialItem, 1, outIndex, innerIndex)}
+                        reduceFunc={() => this.changeGood(materialItem, -1, outIndex, innerIndex)}
                       />
                     </div>
                   </div>
@@ -76,7 +81,8 @@ CardList.wrappedComponent.propTypes = {
 };
 
 CardList.propTypes = {
-  item: PropTypes.object.isRequired,
+  shopItem: PropTypes.object.isRequired,
+  outIndex: PropTypes.number.isRequired,
 };
 
 export default CardList;
