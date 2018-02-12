@@ -10,10 +10,17 @@ class ARButton extends React.Component {
     // will did
   }
   shouldComponentUpdate(nextProps) {
-    if (this.props.location.pathname === '/home' && nextProps.count !== this.props.count) {
+    // if (this.props.location.pathname === '/home' && nextProps.count !== this.props.count) {
+    //   return true;
+    // }
+    // return true;
+    if (this.props.location.pathname === '/home/shopCard') {
       return true;
     }
-    return true;
+    if (nextProps.count !== this.props.count) {
+      return true;
+    }
+    return false;
   }
   render() {
     const {
@@ -21,6 +28,7 @@ class ARButton extends React.Component {
       reduceFunc,
       count,
     } = this.props;
+    console.log('count');
     return (
       <div className="flex_lr_c_c arbutton">
         {

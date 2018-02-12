@@ -1,14 +1,14 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { NavBar, Modal } from 'antd-mobile';
 import CustomIcon from '../CustomIcon';
 import './style.less';
 
 const { alert } = Modal;
 
-@inject(store => ({
+@withRouter @inject(store => ({
   goodStore: store.goodStore,
 })) @observer
 class HomeNavBar extends React.Component {
@@ -27,8 +27,32 @@ class HomeNavBar extends React.Component {
     ]);
   }
 
+  cleanDom = () => (
+    <div className="flex_lr_sb_c right_bar" key="first" onClick={this.cleanHandler} >
+      <div>
+        <CustomIcon type="delete" size="xxs" />
+      </div>
+      <span className="right_bar_text">清除</span>
+    </div>
+  )
+
+  searchDom = () => (
+    <Link to="/home/classification/search" key="first">
+      <span className="right_bar my_search_bar">
+        搜索
+      </span>
+    </Link>
+  )
+
   render() {
     const { title, path } = this.props;
+    const { pathname } = this.props.location;
+    let element;
+    if (pathname === '/home/shopCard') {
+      element = this.cleanDom();
+    } else if (pathname === '/home/classification') {
+      element = this.searchDom();
+    }
     return (
       <div className="nav_bar">
         <NavBar
@@ -36,16 +60,7 @@ class HomeNavBar extends React.Component {
           icon={<Link className="left_bar_back" to={path} replace><CustomIcon type="back" size="xs" /></Link>}
           onLeftClick={() => console.log('onLeftClick')}
           rightContent={[
-            path === '/home'
-            ?
-              <div className="flex_lr_sb_c right_bar" key="first" onClick={this.cleanHandler}>
-                <div>
-                  <CustomIcon type="delete" size="xxs" />
-                </div>
-                <span className="right_bar_text">清除</span>
-              </div>
-            :
-              null,
+            element,
           ]}
         >
           {title}
@@ -62,6 +77,11 @@ HomeNavBar.wrappedComponent.propTypes = {
 HomeNavBar.propTypes = {
   title: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
+  location: PropTypes.object,
+};
+
+HomeNavBar.defaultProps = {
+  location: {},
 };
 
 export default HomeNavBar;

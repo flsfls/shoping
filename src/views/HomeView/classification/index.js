@@ -1,10 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { Route } from 'react-router-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import PropTypes from 'prop-types';
 import Bscroll from 'better-scroll';
 import HomeNavBar from '@components/NavBar';  // eslint-disable-line
 import ClassfiItem from './component/classfiItem';
+import Search from '@homeView/Search'; // eslint-disable-line
 import { get } from '@util/http' // eslint-disable-line
 import './assets/style.less';
 
@@ -22,7 +24,7 @@ class Classification extends React.Component {
   }
 
   componentDidMount() {
-    const { shopId } = this.props.location.state;
+    const { shopId } = sessionStorage;
     get('api/shop/getClassfiShop', { shopId }).then(({ data }) => {
       this.props.goodStore.addClassfiStore(data);
       this.calculateHeight();
@@ -148,6 +150,7 @@ class Classification extends React.Component {
             }
           </ul>
         </div>
+        <Route path="/home/classification/search" component={Search} />
       </div>
     );
   }
@@ -157,12 +160,12 @@ class Classification extends React.Component {
 Classification.wrappedComponent.propTypes = {
   goodStore: PropTypes.object.isRequired,
 };
-Classification.propTypes = {
-  location: PropTypes.object,
-};
+// Classification.propTypes = {
+//   location: PropTypes.object,
+// };
 
-Classification.defaultProps = {
-  location: {},
-};
+// Classification.defaultProps = {
+//   location: {},
+// };
 
 export default Classification;

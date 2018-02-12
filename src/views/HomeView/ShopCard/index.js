@@ -13,33 +13,7 @@ import './assets/style.less';
 })) @observer
 class ShopCard extends Component {
   componentWillMount() {
-    const { goodListStore } = this.props.goodStore;
-    const groupGood = goodListStore.toJS().reduce((box, next) => {
-      const item = next;
-      item.check = true;
-      const { shopName, shopId } = item;
-      const obj = {
-        shopName,
-        shopId,
-        check: true,
-        material: [item],
-      };
-      if (box.length === 0) {
-        box.push(obj);
-      } else {
-        for (let i = 0; i < box.length; i += 1) {
-          if (box[i].shopId === item.shopId) {
-            const materialItem = box[i].material;
-            materialItem.push(item);
-            return box;
-          }
-        }
-        box.push(obj);
-        return box;
-      }
-      return box;
-    }, []);
-    this.props.goodStore.addGroupStore(groupGood);
+    this.props.goodStore.addGroupStore();
   }
 
   componentWillUnmount() {

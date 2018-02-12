@@ -11,9 +11,8 @@ class SlideBar extends React.Component {
   }
 
   goClassification = (shopId) => {
-    this.props.history.push('/home/classification', {
-      shopId,
-    });
+    this.props.history.push('/home/classification');
+    sessionStorage.shopId = shopId;
   }
 
   render() {

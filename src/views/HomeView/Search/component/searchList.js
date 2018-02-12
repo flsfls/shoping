@@ -1,25 +1,19 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-// import PureRenderMixin from 'react-addons-pure-render-mixin';
 import PropTypes from 'prop-types';
 import ARButton from '../../components/ARButton';
 
 @inject(store => ({
   goodStore: store.goodStore,
 })) @observer
-class classfiItem extends React.Component {
+class searchList extends React.Component {
   componentDidMount() {
     // will do
   }
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.material.count !== this.props.material.count) {
-      return true;
-    }
-    return false;
-  }
+
   changeCount = (material, flag) => {
-    const { outIndex, innerIndex } = this.props;
-    this.props.goodStore.changeClassfiCount(outIndex, innerIndex, flag);
+    const { index } = this.props;
+    this.props.goodStore.changeSearchStoreCount(index, flag);
     this.props.goodStore.changeGoodListStore(material, flag);
   }
 
@@ -54,14 +48,12 @@ class classfiItem extends React.Component {
   }
 }
 
-classfiItem.wrappedComponent.propTypes = {
+searchList.wrappedComponent.propTypes = {
   goodStore: PropTypes.object.isRequired,
 };
 
-classfiItem.propTypes = {
+searchList.propTypes = {
   material: PropTypes.object.isRequired,
-  outIndex: PropTypes.number.isRequired,
-  innerIndex: PropTypes.number.isRequired,
+  index: PropTypes.number.isRequired,
 };
-
-export default classfiItem;
+export default searchList;

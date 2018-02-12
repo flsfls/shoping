@@ -20,12 +20,14 @@ class Header extends React.Component {
           <CustomIcon size="sm" type="another" />
           <span className="icon_text">分类</span>
         </div>
-        <div className="center">
-          <div className="flex_lr_fs_c search_box">
-            <CustomIcon size="xxs" type="searchs" />
-            <input placeholder="搜索商品" type="text" />
+        <Link to="/home/search">
+          <div className="center">
+            <div className="flex_lr_fs_c search_box">
+              <CustomIcon size="xxs" type="searchs" />
+              <input placeholder="搜索商品" type="text" />
+            </div>
           </div>
-        </div>
+        </Link>
         <Link to="/home/shopCard" style={{ height: '100%' }}>
           <div className="flex_tb_sb_c right">
             <CustomIcon size="sm" type="card" />

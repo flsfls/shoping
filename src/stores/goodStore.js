@@ -11,6 +11,7 @@ class ShopStore {
   @observable goodListStore = List();
   @observable groupStore = fromJS([]);
   @observable classfiStore = fromJS([])
+  @observable searchStore = fromJS([])
   @computed get totalMoney() {
     let money = 0;
     this.groupStore.forEach((good) => {
@@ -26,6 +27,7 @@ class ShopStore {
   // -----------------------------------------------------------------------------
   @action addGoodList(goodList) {
     this.goodList = this.goodList.concat(fromJS(goodList));
+    this.comparsionGoodList();
   }
 
   @action comparsionGoodList() {
@@ -66,7 +68,7 @@ class ShopStore {
        * @variable goodListStoreId {obj} 当前循环存储选择的物料主健id
        * @variable goodListStoreCount {stirng} 当前循环存储选择的物料主健数量
        * 如果不为空，则进行循环比对，如果有相同的料物，则在此物料基础上加1，然后跳出循环
-       * 如果数量==1 并且是减少操作，则把当前物料从储存物料数组中删除
+       * 如果数量==1 并且是减少操作，则把当前物料从储存物料数组中删除 把操作的储存物料存在localStorage中
        */
       for (let i = 0; i < this.goodListStore.size; i += 1) {
         const goodListStoreId = this.goodListStore.getIn([i, '_id']);
@@ -74,15 +76,22 @@ class ShopStore {
         if (goodListStoreId === good._id) {
           if (goodListStoreCount === 1 && flag === -1) {
             this.goodListStore = this.goodListStore.splice(i, 1);
+            localStorage.goodListStore = JSON.stringify(this.goodListStore);
             return;
           }
           this.goodListStore = this.goodListStore.setIn([i, 'count'], goodListStoreCount + flag);
+          localStorage.goodListStore = JSON.stringify(this.goodListStore);
           return;
         }
       }
       // 如果没有相同的物料则向储选择的物料数组push选中的物料
       this.goodListStore = this.goodListStore.push(Map(addGood));
     }
+    localStorage.goodListStore = JSON.stringify(this.goodListStore);
+  }
+
+  @action saveCacheStore(goodListStore) {
+    this.goodListStore = fromJS(goodListStore);
   }
 
   // -----------------------------------------------------------------------------
@@ -115,8 +124,33 @@ class ShopStore {
    * @major function 把选中后存储的物料转化成购物车需要格式的物料，只是一个group分组转化格式，转化后的的数据与goodListStore一致
    * @param {object<list>} groupStore 转化后的选中的group分组的物料
    */
-  @action addGroupStore(groupStore) {
-    this.groupStore = fromJS(groupStore);
+  @action addGroupStore() {
+    const groupGood = this.goodListStore.toJS().reduce((box, next) => {
+      const item = next;
+      item.check = true;
+      const { shopName, shopId } = item;
+      const obj = {
+        shopName,
+        shopId,
+        check: true,
+        material: [item],
+      };
+      if (box.length === 0) {
+        box.push(obj);
+      } else {
+        for (let i = 0; i < box.length; i += 1) {
+          if (box[i].shopId === item.shopId) {
+            const materialItem = box[i].material;
+            materialItem.push(item);
+            return box;
+          }
+        }
+        box.push(obj);
+        return box;
+      }
+      return box;
+    }, []);
+    this.groupStore = fromJS(groupGood);
   }
   // ---------------------------------------------------------------------------
   /**
@@ -258,6 +292,30 @@ class ShopStore {
 
   @action cleanClassfiStore() {
     this.classfiStore = this.classfiStore.clear();
+  }
+
+  // searchStore -------------------------------------------------
+  @action cleanSearchStore() {
+    this.searchStore = this.searchStore.clear();
+  }
+  @action addSearchStore(search) {
+    const searchStore = search;
+    for (let i = 0; i < searchStore.length; i += 1) {
+      for (let j = 0; j < this.goodListStore.size; j += 1) {
+        const goodListStoreId = this.goodListStore.getIn([j, '_id']);
+        const goodListStoreCount = this.goodListStore.getIn([j, 'count']);
+        if (searchStore[i]._id === goodListStoreId) {
+          searchStore[i].count = goodListStoreCount;
+          break;
+        }
+      }
+    }
+    this.searchStore = this.searchStore.concat(fromJS(searchStore));
+  }
+
+  @action changeSearchStoreCount(index, flag) {
+    const currentCount = this.searchStore.getIn([index, 'count']);
+    this.searchStore = this.searchStore.setIn([index, 'count'], currentCount + flag);
   }
 }
 

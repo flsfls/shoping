@@ -7,6 +7,7 @@ import ShopCard from '../ShopCard';
 import Header from './component/header';
 import OrderGoods from './component/orderGoods';
 import Classification from '../classification';
+import Search from '@homeView/Search' // eslint-disable-line
 import './assets/style.less';
 import './assets/index.less';
 // import { inject, observer } from 'mobx-react';
@@ -144,6 +145,7 @@ class Home extends React.Component {
         />
         <Route path="/home/shopCard" component={ShopCard} />
         <Route path="/home/classification" component={Classification} />
+        <Route path="/home/search" component={Search} />
       </div>
     );
   }

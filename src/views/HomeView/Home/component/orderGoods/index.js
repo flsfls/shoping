@@ -16,8 +16,15 @@ class OrderGoods extends React.Component {
       pageSize: 6,
       pageNum: 1,
       showTip: false,
+      endTip: false,
       hasMore: true,
     };
+  }
+  componentWillMount() {
+    if (localStorage.goodListStore) {
+      const goodListStore = JSON.parse(localStorage.goodListStore);
+      this.props.goodStore.saveCacheStore(goodListStore);
+    }
   }
 
   componentDidMount() {
@@ -43,13 +50,14 @@ class OrderGoods extends React.Component {
       this.setState({
         pageNum: pageNum + (isHasMore ? 1 : 0),
         hasMore: isHasMore,
-        showTip: true,
+        showTip: isHasMore ? true : false, // eslint-disable-line
+        endTip: isHasMore ? false : true, // eslint-disable-line
       });
     });
   }
 
   render() {
-    const { showTip } = this.state;
+    const { showTip, endTip } = this.state;
     const { goodStore } = this.props;
     const goodList = goodStore.goodList.toJS();
     return (
@@ -64,7 +72,7 @@ class OrderGoods extends React.Component {
             </p> : null
         }
         endMessage={
-          showTip ?
+          endTip ?
             <p className="noMore">
               <b>没有更多数据了</b>
             </p>
