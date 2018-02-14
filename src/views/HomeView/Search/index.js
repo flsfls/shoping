@@ -8,6 +8,7 @@ import SearchList from './component/searchList';
 import HomeNavBar from '@components/NavBar';  // eslint-disable-line
 import './assets/style.less';
 
+
 @inject(store => ({
   goodStore: store.goodStore,
 })) @observer
@@ -22,6 +23,7 @@ class Search extends React.Component {
   }
 
   componentDidMount() {
+    this.time = this.throttle(() => this.getFetchList('init'), 300);
     this.props.goodStore.cleanSearchStore();
   }
 
@@ -31,7 +33,7 @@ class Search extends React.Component {
       pageNum: 1,
       hasMore: true,
     }, () => {
-      this.getFetchList('init');
+      this.time();
     });
   }
 
@@ -64,6 +66,18 @@ class Search extends React.Component {
   getSearchList = () => {
     this.getFetchList();
   }
+
+  throttle = (func, wait) => {
+    let time;
+    function timer() {
+      clearTimeout(time);
+      time = setTimeout(() => {
+        func();
+      }, wait);
+    }
+    return timer;
+  }
+
   render() {
     const {
       value,
@@ -78,7 +92,7 @@ class Search extends React.Component {
           value={value}
           onChange={this.onChange}
         />
-        <div className="scroll_body search_content">
+        <div className="scroll_body search_content" ref={(node) => { this.container = node; }}>
           <InfiniteScroll
             height="12.44rem"
             next={this.getSearchList}
@@ -102,8 +116,12 @@ class Search extends React.Component {
                 ?
                 null
                 :
-                searchStore.toJS().map((material, index) => (
-                  <SearchList material={material} key={material._id} index={index} />
+                searchStore.map((material, index) => (
+                  <SearchList
+                    material={material}
+                    key={material.get('_id')}
+                    index={index}
+                  />
                 ))
             }
           </InfiniteScroll>

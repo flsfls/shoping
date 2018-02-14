@@ -15,8 +15,16 @@ function validationAddress({ shopName, address, telephone }) {
   return false;
 }
 
-function demo() {
-  // will do
+function getTotalMoney(chooseGood) {
+  let money = 0;
+  chooseGood.forEach((good) => {
+    good.get('material').forEach((materialItem) => {
+      if (materialItem.get('check') === true) {
+        money += materialItem.get('count') * materialItem.get('money');
+      }
+    });
+  });
+  return money;
 }
 
-export { validationAddress, demo };
+export { validationAddress, getTotalMoney };

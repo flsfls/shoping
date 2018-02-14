@@ -1,7 +1,9 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-// import PureRenderMixin from 'react-addons-pure-render-mixin';
 import PropTypes from 'prop-types';
+// import PureRenderMixin from 'react-addons-pure-render-mixin';
+import LazyLoad from 'vanilla-lazyload';
+import lazyImg from '../assets/bg.jpg';
 import ARButton from '../../components/ARButton';
 
 @inject(store => ({
@@ -9,14 +11,9 @@ import ARButton from '../../components/ARButton';
 })) @observer
 class classfiItem extends React.Component {
   componentDidMount() {
-    // will do
+    new LazyLoad(); // eslint-disable-line
   }
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.material.count !== this.props.material.count) {
-      return true;
-    }
-    return false;
-  }
+
   changeCount = (material, flag) => {
     const { outIndex, innerIndex } = this.props;
     this.props.goodStore.changeClassfiCount(outIndex, innerIndex, flag);
@@ -31,11 +28,11 @@ class classfiItem extends React.Component {
       until,
       money,
       count,
-    } = material;
+    } = material.toJS();
     return (
       <div className="classif_item flex_tb_fs_c">
         <div className="flex_lr_fs_c">
-          <img src={img} alt="" />
+          <img data-src={img} src={lazyImg} alt="" />
           <div className="flex_tb_sb_fs item_name">
             <span>{name}</span>
             <span className="money">¥{money}<span className="until">/{until}</span></span>

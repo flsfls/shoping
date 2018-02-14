@@ -17,6 +17,7 @@ class HomeNavBar extends React.Component {
   }
 
   cleanShop = () => {
+    localStorage.clear();
     this.props.goodStore.cleanGoodStore();
   }
 
@@ -58,7 +59,7 @@ class HomeNavBar extends React.Component {
         <NavBar
           mode="light"
           icon={<Link className="left_bar_back" to={path} replace><CustomIcon type="back" size="xs" /></Link>}
-          onLeftClick={() => console.log('onLeftClick')}
+          // onLeftClick={() => console.log('onLeftClick')}
           rightContent={[
             element,
           ]}

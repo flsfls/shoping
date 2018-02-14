@@ -30,11 +30,11 @@ class ShopCard extends Component {
         />
         <div className="scroll_body">
           {
-            groupStore.toJS().map((item, outIndex) => (
+            groupStore.map((item, outIndex) => (
               <CardList
                 shopItem={item}
                 outIndex={outIndex}
-                key={item.shopId}
+                key={item.get('shopId')}
               />
             ))
           }

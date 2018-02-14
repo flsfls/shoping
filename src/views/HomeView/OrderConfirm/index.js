@@ -17,7 +17,7 @@ import './assets/style.less';
 class OrderConfirm extends React.Component {
   constructor(props) {
     super(props);
-    const nowTimeStamp = Date.now();
+    const nowTimeStamp = Date.now() + (1000 * 60 * 60 * 24);
     const now = new Date(nowTimeStamp);
     this.state = {
       date: now,
@@ -25,10 +25,9 @@ class OrderConfirm extends React.Component {
   }
 
   componentWillMount() {
-    const { goodStore } = this.props.goodStore;
+    const { groupStore } = this.props.goodStore;
     let countOrder = 0;
-    let money = 0;
-    goodStore.forEach((good) => {
+    groupStore.forEach((good) => {
       if (good.get('check') === true) {
         countOrder += 1;
       } else {
@@ -37,14 +36,8 @@ class OrderConfirm extends React.Component {
           countOrder += 1;
         }
       }
-      good.get('material').forEach((materialItem) => {
-        if (materialItem.get('check') === true) {
-          money += materialItem.get('count') * materialItem.get('money');
-        }
-      });
     });
     this.countOrder = countOrder;
-    this.money = money;
   }
 
   goReceiveAddress = (id) => {
@@ -106,7 +99,7 @@ class OrderConfirm extends React.Component {
             </Link>
           </div>
         </div>
-        <ComfirmButton money={this.money} />
+        <ComfirmButton />
         <Route
           path="/home/shopCard/orderConfirm/recevieAddress"
           component={ReceiveAddress}

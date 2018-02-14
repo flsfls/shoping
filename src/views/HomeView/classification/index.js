@@ -1,4 +1,5 @@
 import React from 'react';
+import { ActivityIndicator } from 'antd-mobile';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -12,20 +13,24 @@ import './assets/style.less';
 
 @inject(store => ({
   goodStore: store.goodStore,
+  // classfiStore: store.goodStore.classfiStore,
 })) @observer
 class Classification extends React.Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
-
   state = {
     currentIndex: 0,
+    animating: true,
   }
 
   componentDidMount() {
     const { shopId } = sessionStorage;
     get('api/shop/getClassfiShop', { shopId }).then(({ data }) => {
+      this.setState({
+        animating: false,
+      });
       this.props.goodStore.addClassfiStore(data);
       this.calculateHeight();
       this.initScroll();
@@ -78,10 +83,6 @@ class Classification extends React.Component {
     });
   }
 
-  foodHandler = () => {
-    console.log('ffff');
-  }
-
   calculateHeight = () => {
     this.listHeight = [];
     const foodList = this.food.getElementsByClassName('food-list-hook');
@@ -95,7 +96,6 @@ class Classification extends React.Component {
   }
 
   render() {
-    console.log('1');
     const { classfiStore } = this.props.goodStore;
     const meunList = classfiStore.toJS().map(i => ({
       classifId: i.classifId,
@@ -104,6 +104,11 @@ class Classification extends React.Component {
     const { currentIndex } = this.state;
     return (
       <div className="inner_body classification ">
+        <ActivityIndicator
+          toast
+          text="Loading..."
+          animating={this.state.animating}
+        />
         <HomeNavBar
           title="商品分类"
           path="/home"
@@ -131,12 +136,12 @@ class Classification extends React.Component {
         <div className="foods_wrap" ref={(food) => { this.food = food; }}>
           <ul>
             {
-              classfiStore.toJS().map((item, outIndex) => (
-                <li className="warp_li food-list-hook" key={item.classifId} >
+              classfiStore.map((item, outIndex) => (
+                <li className="warp_li food-list-hook" key={item.get('classifId')} >
                   <p className="classfi_name">{item.classifName}</p>
                   <ul className="classfi_item_box">
-                    {item.material.map((material, innerIndex) => (
-                      <div key={material._id}>
+                    {item.get('material').map((material, innerIndex) => (
+                      <div key={material.get('_id')}>
                         <ClassfiItem
                           material={material}
                           outIndex={outIndex}

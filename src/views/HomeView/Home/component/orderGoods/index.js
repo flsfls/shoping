@@ -59,7 +59,7 @@ class OrderGoods extends React.Component {
   render() {
     const { showTip, endTip } = this.state;
     const { goodStore } = this.props;
-    const goodList = goodStore.goodList.toJS();
+    const { goodList } = goodStore;
     return (
       <InfiniteScroll
         height="11.46rem"
@@ -84,7 +84,7 @@ class OrderGoods extends React.Component {
             <OrderList
               index={index}
               item={item}
-              key={item.name}
+              key={item.get('_id')}
             />
           ))}
         </div>

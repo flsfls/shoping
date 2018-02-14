@@ -12,7 +12,7 @@ class SearchHeader extends React.Component {
     this.autoFocusInst.focus();
   }
 
-  goBack = () => {
+  gofanhui = () => {
     this.props.goodStore.cleanSearchStore();
     this.props.history.goBack();
   }
@@ -21,8 +21,8 @@ class SearchHeader extends React.Component {
     const { value, onChange } = this.props;
     return (
       <div className="search_top flex_lr_sb_c">
-        <div className="center">
-          <div className="flex_lr_fs_c search_box">
+        <div className="search_box">
+          <div className="flex_lr_fs_c">
             <CustomIcon size="xxs" type="searchs" />
             <input
               placeholder="搜索商品"
@@ -33,7 +33,9 @@ class SearchHeader extends React.Component {
             />
           </div>
         </div>
-        <span onClick={this.goBack} className="cancel">取消</span>
+        <div className="cancel" onClick={this.gofanhui}>
+          取消
+        </div>
       </div>
     );
   }

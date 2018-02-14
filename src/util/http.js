@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const baseUrl = 'http://172.168.168.234:3000';
-// const baseUrl = 'http://localhost:3000';
+// const baseUrl = 'http://172.168.168.234:3000';
+const baseUrl = 'http://localhost:3000';
 
 const parseUrl = (url, params = {}) => {
   const str = Object.keys(params).reduce((result, key) => {

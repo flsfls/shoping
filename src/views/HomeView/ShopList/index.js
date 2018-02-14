@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import HomeNavBar from '@components/NavBar';  // eslint-disable-line
 import CustomIcon from '@components/CustomIcon';  // eslint-disable-line
+import { getTotalMoney } from '@util/homeViewModule'; // eslint-disable-line
 import './assets/style.less';
 
 @inject(store => ({
@@ -13,8 +14,8 @@ class ShopList extends React.Component {
     // will did
   }
   render() {
-    const { goodStore } = this.props.goodStore;
-    let copyGoodStore = goodStore;
+    const { groupStore } = this.props.goodStore;
+    let copyGoodStore = groupStore;
     copyGoodStore.forEach((goods, index) => {
       const newGoods = goods.get('material').filter((materialItem) => {
         if (materialItem.get('check')) {
@@ -32,11 +33,11 @@ class ShopList extends React.Component {
         />
         <div className="scroll_body list_container">
           {
-            copyGoodStore.toJS().map(({ supName, material, supId }) => (
-              <div className="list_item" key={supId} >
+            copyGoodStore.toJS().map(({ shopName, material, shopId }) => (
+              <div className="list_item" key={shopId} >
                 <div className="flex_lr_fs_c item_header">
                   <CustomIcon type="shop" size="xxs" />
-                  <span>{supName}</span>
+                  <span>{shopName}</span>
                 </div>
                 {
                   material.map(({ name, count, _id }) => (

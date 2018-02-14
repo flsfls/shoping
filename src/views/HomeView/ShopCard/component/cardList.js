@@ -15,30 +15,25 @@ class CardList extends React.Component {
 
   changeGood = (good, flag, outIndex, innerIndex) => {
     this.props.goodStore.changeGoodListStore(good, flag);
-    // console.log(outIndex, innerIndex);
     this.props.goodStore.changeGroupStoreCount(outIndex, innerIndex, flag);
   }
 
   render() {
     const { shopItem, outIndex } = this.props;
-    const {
-      shopName,
-      check,
-      material,
-    } = shopItem;
     return (
       <div className="cardList">
         <div className="list_header">
           <div className="flex_lr_fs_c list_inner">
             <Checkbox
-              checked={check}
+              checked={shopItem.get('check')}
               onChange={e => this.props.goodStore.warpCheck(e, outIndex)}
             />
-            <p>{shopName}</p>
+            <p>{shopItem.get('shopName')}</p>
           </div>
         </div>
         {
-          material.map((materialItem, innerIndex) => {
+          shopItem.get('material').map((materialItem, innerIndex) => {
+            // console.log(material);
             const {
               name,
               _id,
@@ -46,7 +41,7 @@ class CardList extends React.Component {
               until,
               count,
               check,
-            } = materialItem;
+            } = materialItem.toJS();
             return (
               <div className="flex_lr_fs_c list_info" key={_id} >
                 <Checkbox

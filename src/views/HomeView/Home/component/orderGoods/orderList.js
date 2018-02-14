@@ -1,6 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
+import LazyLoad from 'vanilla-lazyload';
+import lazyImg from '../../assets/bg.jpg';
 import ARButton from '@homeView/components/ARButton'; // eslint-disable-line
 
 @inject(store => ({
@@ -8,7 +10,7 @@ import ARButton from '@homeView/components/ARButton'; // eslint-disable-line
 })) @observer
 class OrderList extends React.Component {
   componentDidMount() {
-    // will do
+    new LazyLoad(); // eslint-disable-line
   }
   /**
    * @param {obj} item 每个物料的所有数据
@@ -36,10 +38,10 @@ class OrderList extends React.Component {
       until,
       money,
       count,
-    } = item;
+    } = item.toJS();
     return (
       <div className="order_item">
-        <img className="item_img" src={img} alt="" />
+        <img className="item_img" data-src={img} src={lazyImg} alt="" />
         <div className="flex_tb_sb_n item_info">
           <p className="info_goodName">{name}</p>
           <div className="flex_lr_sb_c">

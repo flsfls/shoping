@@ -1,6 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import LazyLoad from 'vanilla-lazyload';
 import PropTypes from 'prop-types';
+import loadingSrc from '../assets/bg.jpg';
 import ARButton from '../../components/ARButton';
 
 @inject(store => ({
@@ -8,7 +10,7 @@ import ARButton from '../../components/ARButton';
 })) @observer
 class searchList extends React.Component {
   componentDidMount() {
-    // will do
+    new LazyLoad(); // eslint-disable-line
   }
 
   changeCount = (material, flag) => {
@@ -25,11 +27,11 @@ class searchList extends React.Component {
       until,
       money,
       count,
-    } = material;
+    } = material.toJS();
     return (
       <div className="classif_item flex_tb_fs_c">
         <div className="flex_lr_fs_c">
-          <img src={img} alt="" />
+          <img data-src={img} src={loadingSrc} alt="" />
           <div className="flex_tb_sb_fs item_name">
             <span>{name}</span>
             <span className="money">¥{money}<span className="until">/{until}</span></span>

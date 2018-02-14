@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { fromJS, List, Map } from 'immutable';
+import { fromJS, List } from 'immutable';
 
 /**
  * @observable {Immutable fromJS} goodList 首页下拉物料的所有数据
@@ -58,11 +58,11 @@ class ShopStore {
    */
   @action changeGoodListStore(good, flag) {
     // 把物料的数量设为1，因为一开始为0
-    const addGood = good;
-    addGood.count = 1;
+    let addGood = good;
+    addGood = addGood.set('count', 1);
     // 如果存储选择的物料为空的时个,直接把选择的物料push到存储选择的物料中
     if (this.goodListStore.size === 0) {
-      this.goodListStore = this.goodListStore.push(Map(addGood));
+      this.goodListStore = this.goodListStore.push(addGood);
     } else {
       /**
        * @variable goodListStoreId {obj} 当前循环存储选择的物料主健id
@@ -73,7 +73,7 @@ class ShopStore {
       for (let i = 0; i < this.goodListStore.size; i += 1) {
         const goodListStoreId = this.goodListStore.getIn([i, '_id']);
         const goodListStoreCount = this.goodListStore.getIn([i, 'count']);
-        if (goodListStoreId === good._id) {
+        if (goodListStoreId === good.get('_id')) {
           if (goodListStoreCount === 1 && flag === -1) {
             this.goodListStore = this.goodListStore.splice(i, 1);
             localStorage.goodListStore = JSON.stringify(this.goodListStore);
@@ -85,7 +85,7 @@ class ShopStore {
         }
       }
       // 如果没有相同的物料则向储选择的物料数组push选中的物料
-      this.goodListStore = this.goodListStore.push(Map(addGood));
+      this.goodListStore = this.goodListStore.push(addGood);
     }
     localStorage.goodListStore = JSON.stringify(this.goodListStore);
   }
@@ -112,7 +112,7 @@ class ShopStore {
       const goodlistItemId = goodlistItem.get('_id');
       const goodlistItemCount = goodlistItem.get('count');
       // 如果传入的选中物料主健id 等于 循环出来的物料主健_id值,则下拉物料数组中比对成功的加1或1，退出循环
-      if (goodlistItemId === good._id) {
+      if (goodlistItemId === good.get('_id')) {
         this.goodList = this.goodList.setIn([i, 'count'], goodlistItemCount + flag);
         break;
       }
