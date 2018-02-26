@@ -10,13 +10,14 @@ import ARButton from '@homeView/components/ARButton'; // eslint-disable-line
 })) @observer
 class OrderList extends React.Component {
   componentDidMount() {
+    // 第三方图片懒加载的插件
     new LazyLoad(); // eslint-disable-line
   }
   /**
    * @param {obj} item 每个物料的所有数据
    * @param {number} flag 标识是点减少还是增加
-   * @marjor function 点击加减按扭执行mobx changeGoodCount的action 改变下拉列表的数量，进行同步更新
-   * 和调用changeGoodListStore 改变存储选中的下拉数据
+   * @method changeGoodCount 点击加减按扭执行mobx,changeGoodCount的action,改变下拉列表的数量，进行同步更新
+   * @method changeGoodListStore 改变存储选中的下拉数据
    */
   changeGoodCount = (item, flag) => {
     this.props.goodStore.changeGoodCount(item, flag);
@@ -26,11 +27,11 @@ class OrderList extends React.Component {
   render() {
     const { item } = this.props;
     /**
-     * @param {string} img 物料图片
-     * @param {string} name 物料名
-     * @param {string} until 物料规格
-     * @param {number} money 物料价格
-     * @param {number} count 物料数量
+     * @constant {string} img 物料图片
+     * @constant {string} name 物料名
+     * @constant {string} until 物料规格
+     * @constant {number} money 物料价格
+     * @constant {number} count 物料数量
      */
     const {
       img,
@@ -65,6 +66,9 @@ OrderList.propTypes = {
   item: PropTypes.object.isRequired,
 };
 
+/**
+  * @param {mobx} goodStore mobx中的所有物料操作
+  */
 OrderList.wrappedComponent.propTypes = {
   goodStore: PropTypes.object.isRequired,
 };

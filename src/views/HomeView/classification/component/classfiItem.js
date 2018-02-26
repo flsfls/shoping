@@ -1,7 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
-// import PureRenderMixin from 'react-addons-pure-render-mixin';
 import LazyLoad from 'vanilla-lazyload';
 import lazyImg from '../assets/bg.jpg';
 import ARButton from '../../components/ARButton';
@@ -13,7 +12,14 @@ class classfiItem extends React.Component {
   componentDidMount() {
     new LazyLoad(); // eslint-disable-line
   }
-
+  /**
+   * @param material 当前点击选中的物料
+   * @param flag 加操作还是减操作（-1或者1）
+   * @constant outIndex 物料分类组的外层下标
+   * @constant innerIndex 物料组的每个物料的内层下标
+   * @method changeClassfiCount 改变ClassfiCount里的数量
+   * * @method changeClassfiCount 同时改变选中的存储数量
+   */
   changeCount = (material, flag) => {
     const { outIndex, innerIndex } = this.props;
     this.props.goodStore.changeClassfiCount(outIndex, innerIndex, flag);
@@ -23,11 +29,11 @@ class classfiItem extends React.Component {
   render() {
     const { material } = this.props;
     const {
-      img,
-      name,
-      until,
-      money,
-      count,
+      img, // 图片
+      name, // 物料名
+      until, // 物料规格
+      money, // 物料钱
+      count, // 物料数量
     } = material.toJS();
     return (
       <div className="classif_item flex_tb_fs_c">

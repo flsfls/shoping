@@ -8,12 +8,12 @@ import CustomIcon from '@components/CustomIcon'  // eslint-disable-line
   goodStore: store.goodStore,
 })) @observer
 class SearchHeader extends React.Component {
+  // 让搜索输入框进入页面自动获取焦点
   componentDidMount() {
     this.autoFocusInst.focus();
   }
-
+  // 返回到上个页面
   gofanhui = () => {
-    this.props.goodStore.cleanSearchStore();
     this.props.history.goBack();
   }
 
@@ -41,9 +41,11 @@ class SearchHeader extends React.Component {
   }
 }
 
-SearchHeader.wrappedComponent.propTypes = {
-  goodStore: PropTypes.object.isRequired,
-};
+/**
+  * @param  value 输入框的值
+  * @param  onChange 改变输入框的值
+  * @param  history 路由源信息
+  */
 SearchHeader.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,

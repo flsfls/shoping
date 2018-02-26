@@ -1,8 +1,13 @@
 
+@import '../../commonCss/mixin';
 .nav_bar{
   position: fixed;
   width:100%;
   z-index: 3;
+  top:0;
+  &:before {
+    .bottom-line(#E8E8E8)
+  }
   .left_bar_back {
     width: 2rem;
     height: .88rem;

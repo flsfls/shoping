@@ -1,22 +1,16 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 
-@inject(store => ({
-  goodStore: store.goodStore,
-})) @observer
 class TotalButton extends React.Component {
   componentDidMount() {
-    // will do
+    // will did
   }
-
   render() {
-    const { totalMoney } = this.props.goodStore;
     return (
       <div className="fix_button flex_lr_sb_c confirm_button">
         <div className="flex_lr_fs_c">
           <span className="title">合计:</span>
-          <span className="money">¥{totalMoney}</span>
+          <span className="money">¥{this.props.money}</span>
         </div>
         <p className="confirm">提交下单</p>
       </div>
@@ -24,8 +18,8 @@ class TotalButton extends React.Component {
   }
 }
 
-TotalButton.wrappedComponent.propTypes = {
-  goodStore: PropTypes.object.isRequired,
+TotalButton.propTypes = {
+  money: PropTypes.number.isRequired,
 };
 
 export default TotalButton;

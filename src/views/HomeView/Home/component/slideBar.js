@@ -6,16 +6,19 @@ import CustomIcon from '@components/CustomIcon'  // eslint-disable-line
 
 @withRouter
 class SlideBar extends React.Component {
-  componentDidMount() {
-    // will do
-  }
-
+  /**
+   * @param {String}  shopId 供应商门主店的id
+   * @method onOpenChange 父组件传入改变slidebar的toggle
+   * @description 当点击slidebar里供应商的分类门店时，跳到分类页面，把当前店铺id保存到session中，再调用onOpenChange关闭slidebar
+   */
   goClassification = (shopId) => {
-    this.props.history.push('/home/classification');
+    this.props.onOpenChange();
     sessionStorage.shopId = shopId;
+    this.props.history.push('/home/classification');
   }
 
   render() {
+    // 这里的shop是假数据
     const shop = [
       { shopName: '小肥羊总部', shopId: '1' },
       { shopName: '沙县大酒店总部', shopId: '2' },
@@ -32,7 +35,7 @@ class SlideBar extends React.Component {
         <span>{item.shopName}</span>
       </div>
     ));
-    const { open, onOpenChange } = this.props;
+    const { open } = this.props;
     return (
       <Drawer
         className="my-drawer"
@@ -49,21 +52,25 @@ class SlideBar extends React.Component {
         enableDragHandle
         contentStyle={{ color: '#fff', textAlign: 'center', paddingTop: 42 }}
         open={open}
-        onOpenChange={onOpenChange}
       >
-       1
+        1
       </Drawer>
     );
   }
 }
 
+/**
+ * @param {boolean}  open 初始化是否打开slidebar
+ * @param {object}  history 非路由组件，中的路由信息
+ * @method onOpenChange 父组件传入改变slidebar的toggle
+ */
 SlideBar.propTypes = {
   open: PropTypes.bool.isRequired,
-  onOpenChange: PropTypes.func.isRequired,
   history: PropTypes.object,
+  onOpenChange: PropTypes.func.isRequired,
 };
 SlideBar.defaultProps = {
-  history: { },
+  history: {},
 };
 
 export default SlideBar;

@@ -10,23 +10,17 @@ import Classification from '../classification';
 import Search from '@homeView/Search' // eslint-disable-line
 import './assets/style.less';
 import './assets/index.less';
-// import { inject, observer } from 'mobx-react';
-// import PropTypes from 'prop-types';
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'goodOrder',
-      open: false,
-      hidden: false,
+      selectedTab: 'goodOrder', // 选中的当前table
+      open: false, // 分类的slidebar是否在打开状态
     };
   }
 
-  componentWillMount() {
-    // will
-  }
-
+  // 点击分类的时候，对slidebar显示的值进行取反，这样就可以做成一个toggle效果
   onOpenChange = () => {
     this.setState({ open: !this.state.open });
   }
@@ -53,7 +47,6 @@ class Home extends React.Component {
             unselectedTintColor="#949494"
             tintColor="#F04841"
             barTintColor="white"
-            hidden={this.state.hidden}
           >
             <TabBar.Item
               title="订货"

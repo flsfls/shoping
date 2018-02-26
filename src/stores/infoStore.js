@@ -13,15 +13,13 @@ class Info {
     this.initAddress = Map(address);
   }
   @action addAddress(address) {
-    this.addressList = this.addressList.concat(fromJS(address));
-  }
-  @action cleanAddress() {
-    this.addressList = this.addressList.clear();
+    this.addressList = fromJS(address);
   }
   @action editAddress(id, state) {
     this.addressList.forEach((item, index) => {
       if (item.get('_id') === id) {
-        this.addressList = this.addressList.set(index, Map({ _id: id, check: true, ...state }));
+        const check = item.get('check');
+        this.addressList = this.addressList.set(index, Map({ _id: id, ...state, check }));
       }
     });
   }

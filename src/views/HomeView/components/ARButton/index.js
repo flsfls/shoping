@@ -45,11 +45,6 @@ ARButton.propTypes = {
   count: PropTypes.number.isRequired,
   addFunc: PropTypes.func.isRequired,
   reduceFunc: PropTypes.func.isRequired,
-  // location: PropTypes.object,
 };
-
-// ARButton.defaultProps = {
-//   location: {},
-// };
 
 export default ARButton;

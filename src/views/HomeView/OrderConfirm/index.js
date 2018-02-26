@@ -11,12 +11,17 @@ import CustomIcon from '@components/CustomIcon';  // eslint-disable-line
 import './assets/style.less';
 
 @inject(store => ({
-  goodStore: store.goodStore,
   infoStore: store.infoStore,
 })) @observer
+
+
 class OrderConfirm extends React.Component {
   constructor(props) {
     super(props);
+    /**
+     * @constant nowTimeStamp 当前时间加一天
+     * @constant now 转成日期格式
+     */
     const nowTimeStamp = Date.now() + (1000 * 60 * 60 * 24);
     const now = new Date(nowTimeStamp);
     this.state = {
@@ -25,26 +30,41 @@ class OrderConfirm extends React.Component {
   }
 
   componentWillMount() {
-    const { groupStore } = this.props.goodStore;
+    const { groupStore } = sessionStorage;
+    /**
+     * @constant countOrder 订单数量的初始值
+     * @description 通过格式化之后，只要内层有任何一个物料打勾，就算一个清单，先通过外层判断
+     * 如果外层是true,说明全勾选，则是一个清单，如果外层没有打勾，则内层只有有一个物料打勾也是一个清单
+     */
     let countOrder = 0;
-    groupStore.forEach((good) => {
-      if (good.get('check') === true) {
+    let money = 0;
+    let flag = false;
+    JSON.parse(groupStore).forEach((good) => {
+      const isCountOrder = (() => {
+        good.material.forEach((materialItem) => {
+          if (materialItem.check) {
+            flag = true;
+            money += materialItem.count * materialItem.money;
+          }
+        });
+        return flag;
+      })();
+      if (isCountOrder) {
+        flag = false;
         countOrder += 1;
-      } else {
-        const isInnerChecked = good.get('material').some(materialItem => materialItem.get('check') === true);
-        if (isInnerChecked) {
-          countOrder += 1;
-        }
       }
     });
     this.countOrder = countOrder;
+    this.money = money;
   }
 
+  /**
+   * @param id 地址id
+   * @description 把地址id存在sessionStorage中，带到收货地址展示页，再通过路由跳转到收货地址展示页
+   */
   goReceiveAddress = (id) => {
-    sessionStorage.id = '5a7a8fd1ea4fafc71e85d2c0';
-    this.props.history.push('/home/shopCard/orderConfirm/recevieAddress', {
-      id,
-    });
+    sessionStorage.id = id;
+    this.props.history.push('/home/shopCard/orderConfirm/recevieAddress');
   }
 
   render() {
@@ -56,6 +76,13 @@ class OrderConfirm extends React.Component {
         </div>
       </div>
     );
+    /**
+     * @constant _id 地址id
+     * @constant address 具体地址
+     * @constant shopName 总部名字
+     * @constant shopName 总部电话
+     * @description 这个是要通过用户请求来的，我在mobx中写死
+     */
     const {
       _id,
       address,
@@ -99,7 +126,9 @@ class OrderConfirm extends React.Component {
             </Link>
           </div>
         </div>
-        <ComfirmButton />
+        <ComfirmButton
+          money={this.money}
+        />
         <Route
           path="/home/shopCard/orderConfirm/recevieAddress"
           component={ReceiveAddress}
@@ -113,9 +142,17 @@ class OrderConfirm extends React.Component {
   }
 }
 
+/**
+  * @param {mobx} infoStore mobx中的地址存储与操作
+  */
 OrderConfirm.wrappedComponent.propTypes = {
-  goodStore: PropTypes.object.isRequired,
   infoStore: PropTypes.object.isRequired,
+};
+
+/**
+  * @param {router} history 路由信息
+  */
+OrderConfirm.propTypes = {
   history: PropTypes.object.isRequired,
 };
 

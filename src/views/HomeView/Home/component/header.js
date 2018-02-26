@@ -5,10 +5,9 @@ import { Link, withRouter } from 'react-router-dom';
 
 @withRouter
 class Header extends React.Component {
-  componentDidMount() {
-    // WILL DID
-  }
-
+  /**
+   * @method onOpenChange 父组件中改变点击分类显示slidebar的方法
+   */
   goclassification = () => {
     this.props.onOpenChange();
   }

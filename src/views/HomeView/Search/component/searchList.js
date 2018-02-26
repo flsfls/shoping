@@ -12,8 +12,14 @@ class searchList extends React.Component {
   componentDidMount() {
     new LazyLoad(); // eslint-disable-line
   }
-
+  /**
+   * @param material 选中的当前物料信息
+   * @param flag 表示加或减的操作（-1， 1）
+   * @method changeSearchStoreCount 改变SearchStore的数量，来进行视图更改
+   * @method changeGoodListStore 同时改变所有选中的物料，也同步更改
+   */
   changeCount = (material, flag) => {
+    // 每个物料的index
     const { index } = this.props;
     this.props.goodStore.changeSearchStoreCount(index, flag);
     this.props.goodStore.changeGoodListStore(material, flag);
@@ -22,11 +28,11 @@ class searchList extends React.Component {
   render() {
     const { material } = this.props;
     const {
-      img,
-      name,
-      until,
-      money,
-      count,
+      img, // 图片
+      name, // 物料名
+      until, // 物料规格
+      money, // 物料钱
+      count, // 物料数量
     } = material.toJS();
     return (
       <div className="classif_item flex_tb_fs_c">
@@ -50,10 +56,18 @@ class searchList extends React.Component {
   }
 }
 
+
+/**
+  * @param {mobx} goodStore mobx中的所有物料操作
+  */
 searchList.wrappedComponent.propTypes = {
   goodStore: PropTypes.object.isRequired,
 };
 
+/**
+  * @param {obj} material 每一项物料的信息
+  * @param {number} index 每一个物料的当前下标
+  */
 searchList.propTypes = {
   material: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,

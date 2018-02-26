@@ -8,15 +8,17 @@ import { withRouter } from 'react-router-dom';
   goodStore: store.goodStore,
 })) @observer
 class TotalButton extends React.Component {
-  componentDidMount() {
-    // will do
-  }
-
+  /**
+   * @constant {number} totalMoney totalMoney是一个监听的数据，监听最后返回的值groupStore购选中的money相加
+   * @description 点击下单，进行跳转到订单确认页的页面
+   */
   confirmHandler = () => {
     const { totalMoney } = this.props.goodStore;
+    // 如果整合的全为0,说明去除了所有的购选，则提示用户，选择物料，然后退出
     if (totalMoney === 0) {
       Toast.info('请选择物料商品', 1);
     } else {
+      // 否则则进行页面跳转
       this.props.history.push('/home/shopCard/orderConfirm');
     }
   }
@@ -41,9 +43,15 @@ class TotalButton extends React.Component {
   }
 }
 
+/**
+  * @param {mobx} goodStore mobx中的所有物料操作
+  */
 TotalButton.wrappedComponent.propTypes = {
   goodStore: PropTypes.object.isRequired,
 };
+/**
+  * @param {router} history 路由信息
+  */
 TotalButton.propTypes = {
   history: PropTypes.object,
 };

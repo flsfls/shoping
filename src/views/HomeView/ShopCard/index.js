@@ -13,11 +13,16 @@ import './assets/style.less';
 })) @observer
 class ShopCard extends Component {
   componentWillMount() {
+    // 防止用户刷新页面，如果有sessionStorage.groupStore的话，先用sessionStorage.groupStore保存的数据
+    // 否则把选取的物料进行group组合化，进行保存到mobx的groupStore中
     this.props.goodStore.addGroupStore();
   }
 
   componentWillUnmount() {
+    // 当页面销毁返回到主页面的时候，把下拉加载的物料和选取中的物料再进行一个数量比对
     this.props.goodStore.comparsionGoodList();
+    // 把sessionStorage中的groupStore删除，进来后进行groupStore根据先中的物料进行重置
+    sessionStorage.removeItem('groupStore');
   }
 
   render() {
@@ -49,6 +54,9 @@ class ShopCard extends Component {
   }
 }
 
+/**
+  * @param {mobx} goodStore mobx中的所有物料操作
+  */
 ShopCard.wrappedComponent.propTypes = {
   goodStore: PropTypes.object.isRequired,
 };
