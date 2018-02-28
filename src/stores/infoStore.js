@@ -30,8 +30,8 @@ class Info {
       }
     });
   }
-  @action editAddAddress(state) {
-    this.addressList = this.addressList.push(Map({ _id: Math.random() * 1000, ...state }));
+  @action editAddAddress(data) {
+    this.addressList = this.addressList.push(Map({ _id: data._id, ...data }));
   }
 }
 

@@ -8,8 +8,10 @@ class TotalButton extends React.Component {
     // will did
   }
   commitOrder = () => {
-    this.props.history.push('/home/shopCard/orderConfirm/commitOrder', {
-      money: this.props.money,
+    this.props.commitOrder().then(() => {
+      this.props.history.push('/home/shopCard/orderConfirm/commitOrder', {
+        money: this.props.money,
+      });
     });
   }
   render() {
@@ -28,6 +30,7 @@ class TotalButton extends React.Component {
 TotalButton.propTypes = {
   history: PropTypes.object,
   money: PropTypes.number.isRequired,
+  commitOrder: PropTypes.func.isRequired,
 };
 
 TotalButton.defaultProps = {

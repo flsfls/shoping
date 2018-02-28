@@ -7,13 +7,15 @@ import ComfirmButton from './component/comfirmButton';
 import ReceiveAddress from '../ReceiveAddress';
 import ShopList from '../ShopList';
 import CommitOrder from '../commitOrder';
+import { onChange } from '@util/decoratorMixin'; // eslint-disable-line
+import { post } from '@util/http'; // eslint-disable-line
 import HomeNavBar from '@components/NavBar';  // eslint-disable-line
 import CustomIcon from '@components/CustomIcon';  // eslint-disable-line
 import './assets/style.less';
 
 @inject(store => ({
   infoStore: store.infoStore,
-})) @observer
+})) @observer @onChange
 
 
 class OrderConfirm extends React.Component {
@@ -26,7 +28,8 @@ class OrderConfirm extends React.Component {
     const nowTimeStamp = Date.now() + (1000 * 60 * 60 * 24);
     const now = new Date(nowTimeStamp);
     this.state = {
-      date: now,
+      recevieTime: now,
+      mark: '',
     };
   }
 
@@ -68,6 +71,20 @@ class OrderConfirm extends React.Component {
     this.props.history.push('/home/shopCard/orderConfirm/recevieAddress');
   }
 
+  commitOrder = () => {
+    const { address, shopName, telephone } = this.props.infoStore.initAddress.toJS();
+    const { recevieTime, mark } = this.state;
+    return post('api/order/saveOrder', {}, {
+      address,
+      shopName,
+      telephone,
+      recevieTime,
+      mark,
+      money: this.money,
+      orderList: sessionStorage.groupStore,
+    });
+  }
+
   render() {
     const OrderDate = ({ extra, onClick }) => (
       <div onClick={onClick} className="flex_lr_sb_c list_item">
@@ -90,6 +107,7 @@ class OrderConfirm extends React.Component {
       shopName,
       telephone,
     } = this.props.infoStore.initAddress.toJS();
+    const { recevieTime, mark } = this.state;
     return (
       <div className="inner_body order_confirm">
         <HomeNavBar path="/home/shopCard" title="订单确认" />
@@ -108,14 +126,14 @@ class OrderConfirm extends React.Component {
             <DatePicker
               mode="date"
               title="选择到货日期"
-              value={this.state.date}
-              onChange={date => this.setState({ date })}
+              value={recevieTime}
+              onChange={recevieTime => this.setState({ recevieTime })}
             >
               <OrderDate />
             </DatePicker>
             <div className="flex_lr_sb_c">
               <span>备注</span>
-              <input placeholder="输入备注自信" />
+              <input placeholder="输入备注自信" value={mark} onChange={(e) => { this.onChange(e, 'mark'); }} />
             </div>
             <Link to="/home/shopCard/orderConfirm/shopList">
               <div className="flex_lr_sb_c">
@@ -129,6 +147,7 @@ class OrderConfirm extends React.Component {
         </div>
         <ComfirmButton
           money={this.money}
+          commitOrder={this.commitOrder}
         />
         <Route
           path="/home/shopCard/orderConfirm/recevieAddress"

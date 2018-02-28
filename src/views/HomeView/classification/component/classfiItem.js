@@ -18,7 +18,7 @@ class classfiItem extends React.Component {
    * @constant outIndex 物料分类组的外层下标
    * @constant innerIndex 物料组的每个物料的内层下标
    * @method changeClassfiCount 改变ClassfiCount里的数量
-   * * @method changeClassfiCount 同时改变选中的存储数量
+   * @method changeClassfiCount 同时改变选中的存储数量
    */
   changeCount = (material, flag) => {
     const { outIndex, innerIndex } = this.props;

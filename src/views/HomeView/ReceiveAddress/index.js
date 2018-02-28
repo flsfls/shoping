@@ -28,7 +28,7 @@ class ReceiveAddress extends React.Component {
     if (addressList.size > 0) {
       this.props.infoStore.addAddress(this.formatAddressList(addressList.toJS()));
     } else {
-      get('api/shop/getAddress').then(({ data }) => {
+      get('api/address/getAddress').then(({ data }) => {
         this.props.infoStore.addAddress(this.formatAddressList(data));
       });
     }

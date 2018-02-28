@@ -3,6 +3,7 @@ import React from 'react';
 import { Button, Toast } from 'antd-mobile';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
+import { post, get } from '@util/http';// eslint-disable-line
 import { validationAddress } from '@util/homeViewModule'; // eslint-disable-line
 import AddressEdit from '../components/AddressEdit';
 import HomeNavBar from '@components/NavBar';  // eslint-disable-line
@@ -56,9 +57,14 @@ class EditAddress extends React.Component {
     if (flag === 'edit') {
       const validateFlag = validationAddress(this.state);
       if (!validateFlag) return;
-      this.props.infoStore.editAddress(_id, this.state);
-      Toast.info('修改成功', 1);
+      post('api/address/modifyAddress', {}, { id: _id, ...this.state }).then(() => {
+        this.props.infoStore.editAddress(_id, this.state);
+        Toast.info('修改成功', 1);
+      });
     } else {
+      get('api/address/removeAddress', { id: _id }).then((res) => {
+        console.log(res);
+      });
       Toast.info('删除成功', 1);
       this.props.infoStore.deleteAddress(_id);
     }

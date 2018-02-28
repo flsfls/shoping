@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import { Button, Toast } from 'antd-mobile';
+import { post } from '@util/http'; // eslint-disable-line
 import AddressEdit from '../components/AddressEdit';
 import { validationAddress } from '@util/homeViewModule'; // eslint-disable-line
 import HomeNavBar from '@components/NavBar';  // eslint-disable-line
@@ -29,9 +30,11 @@ class AddRcAddress extends React.Component {
   addAddress = () => {
     const validateFlag = validationAddress(this.state);
     if (!validateFlag) return;
-    this.props.infoStore.editAddAddress(this.state);
-    this.props.history.goBack();
-    Toast.info('添加成功', 1);
+    post('api/address/addAddress', {}, { ...this.state }).then(({ data }) => {
+      this.props.infoStore.editAddAddress(data);
+      this.props.history.goBack();
+      Toast.info('添加成功', 1);
+    });
   }
 
   render() {
