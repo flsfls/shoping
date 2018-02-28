@@ -28,6 +28,11 @@ class Search extends React.Component {
     // 清除所有有searchStore中的数据
     this.props.goodStore.cleanSearchStore();
   }
+
+  componentWillUnmount() {
+    this.props.goodStore.comparsionGoodList();
+  }
+
   /**
    * @param value 搜索的数据
    * @description 当改变搜索的时候进行向后台调用值

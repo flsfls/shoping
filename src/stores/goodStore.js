@@ -69,6 +69,11 @@ class ShopStore {
     }
   }
 
+
+  @action cleanGoodListStore() {
+    this.goodListStore = this.goodListStore.clear();
+  }
+
   // -----------------------------------------------------------------------------
   /**
    * @param {object} good 当前选中传入的物料，每个物料的基本属性全在其中

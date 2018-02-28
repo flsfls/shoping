@@ -35,17 +35,28 @@ class ShopList extends React.Component {
           {
             copyGoodStore.toJS().map(({ shopName, material, shopId }) => (
               <div className="list_item" key={shopId} >
-                <div className="flex_lr_fs_c item_header">
-                  <CustomIcon type="shop" size="xxs" />
-                  <span>{shopName}</span>
+                <div className="flex_lr_sb_c item_header">
+                  <div className="flex_lr_fs_c">
+                    <CustomIcon type="shop" size="xxs" />
+                    <span>{shopName}</span>
+                  </div>
+                  <p>共{material.length}件</p>
                 </div>
                 {
-                  material.map(({ name, count, _id }) => (
-                    <div className="flex_lr_sb_c item_body" key={_id} >
-                      <span className="body_content">{name}</span>
+                  material.map(({
+                    img,
+                    name,
+                    count,
+                    _id,
+                  }) => (
+                    <div className="flex_lr_sb_fs item_body" key={_id} >
+                      <div className="flex_lr_sb_fs item_inner">
+                        <img src={img} alt="" />
+                        <span className="body_content">{name}</span>
+                      </div>
                       <span className="body_count">x{count}</span>
                     </div>
-                  ))
+                    ))
                 }
               </div>
             ))

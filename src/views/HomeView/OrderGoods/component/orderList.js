@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import LazyLoad from 'vanilla-lazyload';
-import lazyImg from '../../assets/bg.jpg';
+import lazyImg from '../assets/bg.jpg';
 import ARButton from '@homeView/components/ARButton'; // eslint-disable-line
 
 @inject(store => ({

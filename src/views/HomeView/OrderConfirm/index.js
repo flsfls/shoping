@@ -6,6 +6,7 @@ import { Link, Route } from 'react-router-dom';
 import ComfirmButton from './component/comfirmButton';
 import ReceiveAddress from '../ReceiveAddress';
 import ShopList from '../ShopList';
+import CommitOrder from '../commitOrder';
 import HomeNavBar from '@components/NavBar';  // eslint-disable-line
 import CustomIcon from '@components/CustomIcon';  // eslint-disable-line
 import './assets/style.less';
@@ -136,6 +137,10 @@ class OrderConfirm extends React.Component {
         <Route
           path="/home/shopCard/orderConfirm/shopList"
           component={ShopList}
+        />
+        <Route
+          path="/home/shopCard/orderConfirm/commitOrder"
+          component={CommitOrder}
         />
       </div>
     );

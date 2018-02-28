@@ -3,13 +3,11 @@ import { TabBar } from 'antd-mobile';
 import { Route, Link } from 'react-router-dom';
 import CustomIcon from '@components/CustomIcon'; // eslint-disable-line
 import SlideBar from './component/slideBar';
-import ShopCard from '../ShopCard';
-import Header from './component/header';
-import OrderGoods from './component/orderGoods';
-import Classification from '../classification';
+import ShopCard from '@homeView/ShopCard'; // eslint-disable-line
+import OrderGoods from '@homeView/OrderGoods'; // eslint-disable-line
+import Classification from '@homeView/classification'; // eslint-disable-line
 import Search from '@homeView/Search' // eslint-disable-line
 import './assets/style.less';
-import './assets/index.less';
 
 class Home extends React.Component {
   constructor(props) {
@@ -38,10 +36,9 @@ class Home extends React.Component {
     const { open } = this.state;
     return (
       <div className="inner_body home">
-        <Header onOpenChange={this.onOpenChange} />
         <div
           ref={(node) => { this.scrollnode = node; }}
-          className="scroll_body home_container"
+          className="home_container"
         >
           <TabBar
             unselectedTintColor="#949494"
@@ -63,7 +60,7 @@ class Home extends React.Component {
               }}
               data-seed="logId"
             >
-              <OrderGoods />
+              <OrderGoods onOpenChange={this.onOpenChange} />
             </TabBar.Item>
             <TabBar.Item
               icon={

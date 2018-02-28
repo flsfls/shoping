@@ -46,7 +46,7 @@ class HomeNavBar extends React.Component {
   )
 
   render() {
-    const { title, path } = this.props;
+    const { title } = this.props;
     const { pathname } = this.props.location;
     let element;
     if (pathname === '/home/shopCard') {
@@ -58,8 +58,8 @@ class HomeNavBar extends React.Component {
       <div className="nav_bar">
         <NavBar
           mode="light"
-          icon={<Link className="left_bar_back" to={path} replace><CustomIcon type="back" size="xs" /></Link>}
-          // onLeftClick={() => console.log('onLeftClick')}
+          icon={<CustomIcon type="back" size="xs" />}
+          onLeftClick={() => { this.props.history.go(-1); }}
           rightContent={[
             element,
           ]}
@@ -77,12 +77,13 @@ HomeNavBar.wrappedComponent.propTypes = {
 };
 HomeNavBar.propTypes = {
   title: PropTypes.string.isRequired,
-  path: PropTypes.string.isRequired,
   location: PropTypes.object,
+  history: PropTypes.object,
 };
 
 HomeNavBar.defaultProps = {
   location: {},
+  history: {},
 };
 
 export default HomeNavBar;

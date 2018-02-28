@@ -52,6 +52,7 @@ class SlideBar extends React.Component {
         enableDragHandle
         contentStyle={{ color: '#fff', textAlign: 'center', paddingTop: 42 }}
         open={open}
+        onOpenChange={this.props.onOpenChange}
       >
         1
       </Drawer>

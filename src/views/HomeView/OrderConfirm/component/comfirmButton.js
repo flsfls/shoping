@@ -1,9 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
+@withRouter
 class TotalButton extends React.Component {
   componentDidMount() {
     // will did
+  }
+  commitOrder = () => {
+    this.props.history.push('/home/shopCard/orderConfirm/commitOrder', {
+      money: this.props.money,
+    });
   }
   render() {
     return (
@@ -12,14 +19,18 @@ class TotalButton extends React.Component {
           <span className="title">合计:</span>
           <span className="money">¥{this.props.money}</span>
         </div>
-        <p className="confirm">提交下单</p>
+        <p className="confirm" onClick={this.commitOrder}>提交下单</p>
       </div>
     );
   }
 }
 
 TotalButton.propTypes = {
+  history: PropTypes.object,
   money: PropTypes.number.isRequired,
 };
 
+TotalButton.defaultProps = {
+  history: {},
+};
 export default TotalButton;
