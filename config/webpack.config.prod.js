@@ -91,6 +91,13 @@ module.exports = {
     extensions: ['.web.js', '.mjs', '.js', '.json', '.web.jsx', '.jsx'],
     alias: {
       '@views': path.resolve(__dirname, '../src/views'),
+      '@util': path.resolve(__dirname, '../src/util'),
+      '@homeView': path.resolve(__dirname, '../src/views/HomeView'),
+      '@components': path.resolve(__dirname, '../src/components'),
+      '@goodReceiptView': path.resolve(__dirname, '../src/views/GoodReceiptView'),
+      '@libraryView': path.resolve(__dirname, '../src/views/LibraryView'),
+      '@inventoryView': path.resolve(__dirname, '../src/views/InventoryView'),
+      '@myView': path.resolve(__dirname, '../src/views/MyView'),
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -121,7 +128,7 @@ module.exports = {
             options: {
               formatter: eslintFormatter,
               eslintPath: require.resolve('eslint'),
-              
+
             },
             loader: require.resolve('eslint-loader'),
           },
@@ -149,7 +156,7 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              
+
               compact: true,
             },
           },
@@ -206,7 +213,13 @@ module.exports = {
                       },
                     },
                     {
-                      loader: require.resolve('less-loader') // compiles Less to CSS
+                      loader: require.resolve('less-loader'), // compiles Less to CSS
+                      options: {
+                        modifyVars: {
+                          'brand-primary': '#FF6050',
+                          'list-item-height': '1rem',
+                        }
+                      }
                     },
                   ],
                 },
@@ -214,6 +227,18 @@ module.exports = {
               )
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+          },
+          {
+            test: /\.(svg)$/,
+            loader: require.resolve('svg-sprite-loader'),
+            include: [
+              path.resolve(__dirname, '../src'),
+            ],
+
+            options: {
+              limit: 100,
+              name: 'svg/[name].[hash:8].[ext]',
+            },
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.

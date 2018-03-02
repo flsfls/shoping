@@ -88,6 +88,10 @@ module.exports = {
       '@util': path.resolve(__dirname, '../src/util'),
       '@homeView': path.resolve(__dirname, '../src/views/HomeView'),
       '@components': path.resolve(__dirname, '../src/components'),
+      '@goodReceiptView': path.resolve(__dirname, '../src/views/GoodReceiptView'),
+      '@libraryView': path.resolve(__dirname, '../src/views/LibraryView'),
+      '@inventoryView': path.resolve(__dirname, '../src/views/InventoryView'),
+      '@myView': path.resolve(__dirname, '../src/views/MyView'),
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',

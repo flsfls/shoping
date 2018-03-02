@@ -35,7 +35,7 @@ class searchList extends React.Component {
       count, // 物料数量
     } = material.toJS();
     return (
-      <div className="classif_item flex_tb_fs_c">
+      <div className="classif_item">
         <div className="flex_lr_fs_c">
           <img data-src={img} src={loadingSrc} alt="" />
           <div className="flex_tb_sb_fs item_name">

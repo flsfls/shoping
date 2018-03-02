@@ -4,6 +4,10 @@ import { Route, Link } from 'react-router-dom';
 import CustomIcon from '@components/CustomIcon'; // eslint-disable-line
 import SlideBar from './component/slideBar';
 import ShopCard from '@homeView/ShopCard'; // eslint-disable-line
+import GoodReceipt from '@goodReceiptView/GoodReceipt' // eslint-disable-line
+import Library from '@libraryView/Library' // eslint-disable-line
+import Inventory from '@inventoryView/Inventory' // eslint-disable-line
+import My from '@myView/My'// eslint-disable-line
 import OrderGoods from '@homeView/OrderGoods'; // eslint-disable-line
 import Classification from '@homeView/classification'; // eslint-disable-line
 import Search from '@homeView/Search' // eslint-disable-line
@@ -13,7 +17,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'goodOrder', // 选中的当前table
+      selectedTab: 'my', // 选中的当前table
       open: false, // 分类的slidebar是否在打开状态
     };
   }
@@ -79,7 +83,7 @@ class Home extends React.Component {
               }}
               data-seed="logId1"
             >
-              {this.renderContent('Koubei')}
+              <GoodReceipt />
             </TabBar.Item>
             <TabBar.Item
               icon={
@@ -97,7 +101,7 @@ class Home extends React.Component {
                 });
               }}
             >
-              {this.renderContent('Friend')}
+              <Library />
             </TabBar.Item>
             <TabBar.Item
               icon={<CustomIcon type="inventoryNo" />}
@@ -111,7 +115,7 @@ class Home extends React.Component {
                 });
               }}
             >
-              {this.renderContent('My')}
+              <Inventory />
             </TabBar.Item>
             <TabBar.Item
               icon={<CustomIcon type="myNo" />}
@@ -125,7 +129,7 @@ class Home extends React.Component {
                 });
               }}
             >
-              {this.renderContent('My')}
+              <My />
             </TabBar.Item>
           </TabBar>
         </div>
