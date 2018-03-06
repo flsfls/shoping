@@ -110,7 +110,7 @@ class OrderConfirm extends React.Component {
     const { recevieTime, mark } = this.state;
     return (
       <div className="inner_body order_confirm">
-        <HomeNavBar path="/home/shopCard" title="订单确认" />
+        <HomeNavBar title="订单确认" />
         <div className="orderConfirm_container">
           <div className="flex_lr_sb_c orderConfirm_address" onClick={() => this.goReceiveAddress(_id)}>
             <div className="address_info">

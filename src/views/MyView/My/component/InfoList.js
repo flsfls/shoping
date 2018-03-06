@@ -10,9 +10,9 @@ function InfoList(props) {
         <span>{title}</span>
       </p>
       <ul className="list_item">
-        {list.map(({ text }) => (
-          <li className="flex_tb_c_c">
-            <span className="img" />
+        {list.map(({ img, text }, index) => (
+          <li className="flex_tb_c_c" key={index}>
+            <img src={img} alt="" />
             <span className="text">{text}</span>
           </li>
         ))}

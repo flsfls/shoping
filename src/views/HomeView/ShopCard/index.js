@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
+import { Modal } from 'antd-mobile';
 import { Route } from 'react-router-dom';
 import CardList from './component/cardList';
 import TotalButton from './component/totalBottom';
 import OrderConfirm from '../OrderConfirm';
+import CustomIcon from '@components/CustomIcon';  // eslint-disable-line
 import HomeNavBar from '@components/NavBar';  // eslint-disable-line
 import './assets/style.less';
+
+
+const { alert } = Modal;
 
 @inject(store => ({
   goodStore: store.goodStore,
@@ -25,12 +30,35 @@ class ShopCard extends Component {
     sessionStorage.removeItem('groupStore');
   }
 
+  cleanDom = () => (
+    <div className="flex_lr_sb_c right_bar" key="first" onClick={this.cleanHandler} >
+      <div>
+        <CustomIcon type="delete" size="xxs" />
+      </div>
+      <span className="right_bar_text">清除</span>
+    </div>
+  )
+
+  cleanShop = () => {
+    localStorage.clear();
+    this.props.goodStore.cleanGoodStore();
+  }
+
+  cleanHandler = () => {
+    alert('提示', '确定是否删除购物车?', [
+      { text: '取消' },
+      { text: '确认', onPress: this.cleanShop },
+    ]);
+  }
+
+
   render() {
     const { groupStore } = this.props.goodStore;
     return (
       <div className="inner_body shopcard">
         <HomeNavBar
           title="购物车"
+          right={this.cleanDom()}
           path="/home"
         />
         <div className="scroll_body">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './assets/style.less';
 
@@ -9,10 +10,14 @@ function EnterList(props) {
     <div className="enter_list">
       <p className="title">{title}</p>
       <ul className="list_item">
-        {list.map(({ text }) => (
-          <li className="flex_tb_sb_c">
-            <span className="img" />
-            <span className="text">{text}</span>
+        {list.map(({ img, text, route }, index) => (
+          <li key={index}>
+            <Link style={{ height: '100%' }} className="flex_tb_sb_c" to={{ pathname: route }} >
+              {
+                img === '' ? <span className="img" /> : <img src={img} alt="" />
+              }
+              <span className="text">{text}</span>
+            </Link>
           </li>
         ))}
       </ul>

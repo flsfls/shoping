@@ -5,6 +5,8 @@ import CustomIcon from '@components/CustomIcon'; // eslint-disable-line
 import SlideBar from './component/slideBar';
 import ShopCard from '@homeView/ShopCard'; // eslint-disable-line
 import GoodReceipt from '@goodReceiptView/GoodReceipt' // eslint-disable-line
+import PurchaseOrder from '@goodReceiptView/PurchaseOrder'; // eslint-disable-line
+import WareHousing from '@goodReceiptView/WareHousing' // eslint-disable-line
 import Library from '@libraryView/Library' // eslint-disable-line
 import Inventory from '@inventoryView/Inventory' // eslint-disable-line
 import My from '@myView/My'// eslint-disable-line
@@ -17,7 +19,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'my', // 选中的当前table
+      selectedTab: 'receiveOrder', // 选中的当前table
       open: false, // 分类的slidebar是否在打开状态
     };
   }
@@ -140,6 +142,8 @@ class Home extends React.Component {
         <Route path="/home/shopCard" component={ShopCard} />
         <Route path="/home/classification" component={Classification} />
         <Route path="/home/search" component={Search} />
+        <Route path="/home/purchaseOrder" component={PurchaseOrder} />
+        <Route path="/home/wareHousing" component={WareHousing} />
       </div>
     );
   }

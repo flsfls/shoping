@@ -1,5 +1,11 @@
 import React from 'react';
 import EnterList from '@components/EnterList'; // eslint-disable-line
+import One from './assets/07@2x.png';
+import Two from './assets/08@2x.png';
+import Three from './assets/09@2x.png';
+import Four from './assets/10@2x.png';
+import Five from './assets/11@2x.png';
+import Six from './assets/06@2x.png';
 
 class Library extends React.Component {
   componentDidMount() {
@@ -9,35 +15,45 @@ class Library extends React.Component {
   render() {
     const data = [
       {
-        title: '购管理',
-        list: [
-          {
-            img: '',
-            text: '自采订单',
-          },
-          {
-            img: '',
-            text: '采购订单',
-          },
-        ],
+        title: '收银出库',
+        list: [{
+          img: One,
+          text: '自动出货',
+        }],
       },
       {
-        title: '入库管理',
+        title: '领料出库',
         list: [
           {
-            img: '',
-            text: '采购入库单',
+            img: Two,
+            text: '领料单',
+          },
+          {
+            img: Three,
+            text: '退料单',
+          },
+          {
+            img: Four,
+            text: '报损单',
+          },
+          {
+            img: Five,
+            text: '出库列表',
           },
           {
             img: '',
-            text: '采购退货单',
+            text: '暂无资料',
           },
           {
             img: '',
-            text: '库列表',
+            text: '暂无资料',
           },
           {
             img: '',
+            text: '暂无资料',
+          },
+          {
+            img: Six,
             text: '即时库存',
           },
         ],
@@ -45,7 +61,7 @@ class Library extends React.Component {
     ];
     return (
       <div>
-        {data.map(item => <EnterList item={item} />)}
+        {data.map((item, index) => <EnterList item={item} key={index} />)}
       </div>
     );
   }

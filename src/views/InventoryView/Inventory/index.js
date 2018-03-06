@@ -1,5 +1,10 @@
 import React from 'react';
 import EnterList from '@components/EnterList'; // eslint-disable-line
+import One from './assets/12@2x.png';
+import Two from './assets/13@2x.png';
+import Three from './assets/14@2x.png';
+import Four from './assets/15@2x.png';
+import Six from './assets/06@2x.png';
 
 class Inventory extends React.Component {
   componentDidMount() {
@@ -12,23 +17,35 @@ class Inventory extends React.Component {
         title: '盘点管理',
         list: [
           {
-            img: '',
+            img: One,
             text: '新增盘点',
           },
           {
-            img: '',
+            img: Two,
             text: '盘点列表',
           },
           {
-            img: '',
+            img: Three,
             text: '盘盈单',
           },
           {
-            img: '',
+            img: Four,
             text: '盘亏单',
           },
           {
             img: '',
+            text: '暂无资料',
+          },
+          {
+            img: '',
+            text: '暂无资料',
+          },
+          {
+            img: '',
+            text: '暂无资料',
+          },
+          {
+            img: Six,
             text: '即时库存',
           },
         ],
@@ -36,7 +53,7 @@ class Inventory extends React.Component {
     ];
     return (
       <div>
-        {data.map(item => <EnterList item={item} />)}
+        {data.map((item, index) => <EnterList item={item} key={index} />)}
       </div>
     );
   }

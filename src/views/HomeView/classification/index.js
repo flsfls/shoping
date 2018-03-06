@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActivityIndicator } from 'antd-mobile';
 import { inject, observer } from 'mobx-react';
-import { Route } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import PropTypes from 'prop-types';
 import Bscroll from 'better-scroll';
@@ -121,6 +121,14 @@ class Classification extends React.Component {
     }
   }
 
+  searchDom = () => (
+    <Link to="/home/classification/search" key="first">
+      <span className="right_bar my_search_bar">
+        搜索
+      </span>
+    </Link>
+  )
+
   render() {
     const { classfiStore } = this.props.goodStore;
     const meunList = classfiStore.toJS().map(i => ({
@@ -138,6 +146,7 @@ class Classification extends React.Component {
         <HomeNavBar
           title="商品分类"
           path="/home"
+          right={this.searchDom()}
         />
         <div className="menu_wrap" ref={(menu) => { this.menu = menu; }}>
           <ul>
