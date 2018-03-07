@@ -48,12 +48,15 @@ class PruchaseOrder extends React.Component {
       open: !this.state.open,
     });
   }
+  addChange = () => {
 
+  }
   render() {
     return (
       <div className="purchaseOrder inner_body">
         <OrderNavBar
           onOpenChange = {this.onOpenChange}
+          addChange={this.addChange}
           placeholder="供应商 单号 单据日期"
         />
         <div>

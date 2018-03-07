@@ -1,5 +1,7 @@
 import React from 'react';
+import { Toast } from 'antd-mobile';
 import PropTypes from 'prop-types';
+import  { get } from '@util/http'; // eslint-disable-line
 import Logo from './assets/bizLogo.jpg';
 import { onChange } from '../../util/decoratorMixin'; // eslint-disable-line
 import './assets/style.less';
@@ -7,37 +9,44 @@ import './assets/style.less';
 @onChange
 class Login extends React.Component {
   state = {
-    shopName: '',
-    userName: '',
-    passWord: '',
+    fsShopName: '', // 商户名
+    fsUserId: '', // 用户名
+    fsPwd: '', // 密码
   }
   componentDidMount() {
-    // will do
+    // will
   }
 
   login = () => {
-    this.props.history.replace('/home');
+    const isoK = Object.values(this.state).some(item => item === '');
+    if (isoK) {
+      Toast.info('请添写用户信息', 1);
+      return;
+    }
+    get('wap/loginWap', { ...this.state }).then(() => {
+      this.props.history.replace('/home');
+    });
   }
 
   render() {
-    const { shopName, userName, passWord } = this.state;
+    const { fsShopName, fsUserId, fsPwd } = this.state;
     return (
       <div className="login flex_tb_fs_c">
         <img src={Logo} alt="" />
         <input
           placeholder="请输入商户名"
-          value={shopName}
-          onChange={e => this.onChange(e, 'shopName')}
+          value={fsShopName}
+          onChange={e => this.onChange(e, 'fsShopName')}
         />
         <input
           placeholder="请输入用户名"
-          value={userName}
-          onChange={e => this.onChange(e, 'userName')}
+          value={fsUserId}
+          onChange={e => this.onChange(e, 'fsUserId')}
         />
         <input
           placeholder="请输入密码"
-          value={passWord}
-          onChange={e => this.onChange(e, 'passWord')}
+          value={fsPwd}
+          onChange={e => this.onChange(e, 'fsPwd')}
         />
         <button onClick={this.login}>登录</button>
       </div>

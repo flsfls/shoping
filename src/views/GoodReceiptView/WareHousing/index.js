@@ -1,5 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ActionSheet } from 'antd-mobile';
+import { Route } from 'react-router-dom';
+import AddPuchaseLibrary from '@goodReceiptView/AddPuchaseLibrary'; // eslint-disable-line
+// import AddBackLibrary from '@goodReceiptView/AddBackLibrary'; // eslint-disable-line
 import OrderNavBar from '@components/OrderNavBar';   // eslint-disable-line
 import OrderList from '@components/OrderList'; // eslint-disable-line
 import { get } from '@util/http'; // eslint-disable-line
@@ -56,7 +60,7 @@ class WareHousing extends React.Component {
   }
 
   showActionSheet = () => {
-    const BUTTONS = ['领料单', '退料单', '取消'];
+    const BUTTONS = ['采购入库', '采购退货', '取消'];
     ActionSheet.showActionSheetWithOptions(
       {
         options: BUTTONS,
@@ -67,7 +71,11 @@ class WareHousing extends React.Component {
         wrapProps,
       },
       (buttonIndex) => {
-        console.log(buttonIndex);
+        if (buttonIndex <= 1) {
+          console.log(1);
+          sessionStorage.title = BUTTONS[buttonIndex];
+          this.props.history.push('/home/wareHousing/addPuchaseLibrary');
+        }
       },
     );
   }
@@ -91,9 +99,14 @@ class WareHousing extends React.Component {
           onOpenChange={this.onOpenChange}
           open={open}
         />
+        <Route path="/home/wareHousing/addPuchaseLibrary" component={AddPuchaseLibrary} />
       </div>
     );
   }
 }
+
+WareHousing.propTypes = {
+  history: PropTypes.object.isRequired,
+};
 
 export default WareHousing;

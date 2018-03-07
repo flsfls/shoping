@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DatePicker, Picker } from 'antd-mobile';
-import CustomIcon from '@components/CustomIcon';  // eslint-disable-line
 import OrderSlideBar from '@components/OrderSlideBar'; // eslint-disable-line
 
 

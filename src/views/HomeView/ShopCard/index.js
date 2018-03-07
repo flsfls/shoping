@@ -59,7 +59,6 @@ class ShopCard extends Component {
         <HomeNavBar
           title="购物车"
           right={this.cleanDom()}
-          path="/home"
         />
         <div className="scroll_body">
           {
