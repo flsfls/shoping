@@ -13,9 +13,9 @@ import './assets/style.less';
 })) @observer
 class AddRcAddress extends React.Component {
   state = {
-    shopName: '',
-    telephone: '',
-    address: '',
+    fsReceiver: '', // 收货人
+    fsCellphoneRr: '', // 收货人电话
+    fsAddress: '', // 收货人地址
   }
   componentDidMount() {
     // will do
@@ -30,7 +30,7 @@ class AddRcAddress extends React.Component {
   addAddress = () => {
     const validateFlag = validationAddress(this.state);
     if (!validateFlag) return;
-    post('api/address/addAddress', {}, { ...this.state }).then(({ data }) => {
+    post('wap/deliverAddr/add', {}, { ...this.state, fiDefault: 0 }).then(({ data }) => {
       this.props.infoStore.editAddAddress(data);
       this.props.history.goBack();
       Toast.info('添加成功', 1);
@@ -38,18 +38,11 @@ class AddRcAddress extends React.Component {
   }
 
   render() {
-    const {
-      shopName,
-      telephone,
-      address,
-    } = this.state;
     return (
       <div className="inner_body addRC_address">
         <HomeNavBar title="新增收货地址" path="/home/shopCard/orderConfirm/recevieAddress" />
         <AddressEdit
-          shopName={shopName}
-          telephone={telephone}
-          address={address}
+          {...this.state}
           onChange={this.onChange}
         />
         <Button

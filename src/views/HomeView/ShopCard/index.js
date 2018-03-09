@@ -66,7 +66,7 @@ class ShopCard extends Component {
               <CardList
                 shopItem={item}
                 outIndex={outIndex}
-                key={item.get('shopId')}
+                key={item.get('fsSupplierId')}
               />
             ))
           }

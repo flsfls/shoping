@@ -7,6 +7,7 @@ import Store from './stores';
 import './commonCss/base.less';
 import registerServiceWorker from './registerServiceWorker';
 
+
 ReactDOM.render(
   <Provider {...Store}>
     <BrowserRouter>

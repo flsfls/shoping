@@ -27,32 +27,34 @@ class OrderList extends React.Component {
   render() {
     const { item } = this.props;
     /**
-     * @constant {string} img 物料图片
-     * @constant {string} name 物料名
-     * @constant {string} until 物料规格
-     * @constant {number} money 物料价格
+     * @constant {string} fsImgUrl 物料图片
+     * @constant {string} fsMaterialName 物料名
+     * @constant {string} fsSaleUnitName 物料销售规格
+     * @constant {number} fdSaleUnitRate 物料销售换算率
+     * @constant {number} fdSalePrice 物料销售价格
+     * @constant {number} fsModelno 物料计量单位
      * @constant {number} count 物料数量
      */
     const {
-      img,
-      name,
-      until,
-      money,
+      fsImgUrl,
+      fsMaterialName,
+      fsSaleUnitName,
+      fdSalePrice,
+      fsModelno,
+      fdSaleUnitRate,
       count,
     } = item.toJS();
     return (
       <div className="order_item">
-        <img className="item_img" data-src={img} src={lazyImg} alt="" />
+        <img className="item_img" data-src={fsImgUrl} src={lazyImg} alt="" />
         <div className="flex_tb_sb_n item_info">
-          <p className="info_goodName">{name}</p>
-          <div className="flex_lr_sb_c">
-            <p className="price_kg"><span>¥{money}块</span>／{until}</p>
-            <ARButton
-              count={count}
-              addFunc={() => this.changeGoodCount(item, 1)}
-              reduceFunc={() => this.changeGoodCount(item, -1)}
-            />
-          </div>
+          <p className="info_goodName">{fsMaterialName} {fsModelno}</p>
+          <p className="price_kg"><span>¥{fdSalePrice * fdSaleUnitRate}</span>／{fsSaleUnitName}</p>
+          <ARButton
+            count={count}
+            addFunc={() => this.changeGoodCount(item, 1)}
+            reduceFunc={() => this.changeGoodCount(item, -1)}
+          />
         </div>
       </div>
     );

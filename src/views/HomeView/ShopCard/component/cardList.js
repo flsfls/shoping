@@ -44,31 +44,33 @@ class CardList extends React.Component {
               checked={shopItem.get('check')}
               onChange={e => this.props.goodStore.warpCheck(e, outIndex)}
             />
-            <p>{shopItem.get('shopName')}</p>
+            <p>{shopItem.get('fsSupplierName')}</p>
           </div>
         </div>
         {
           shopItem.get('material').map((materialItem, innerIndex) => {
             const {
-              name,
-              _id,
-              money,
-              until,
-              count,
-              check,
+              fsImgUrl, // 物料图片
+              fsMaterialName, // 物料名
+              fsMaterialGuId, // 物料id
+              fdSalePrice, // 物料单位
+              fsSaleUnitName, // 物料销售规格
+              fdSaleUnitRate, // 物料销售换算率
+              count, // 物料数量
+              check, // 是否勾选
             } = materialItem.toJS();
             return (
-              <div className="flex_lr_fs_c list_info" key={_id} >
+              <div className="flex_lr_fs_c list_info" key={fsMaterialGuId} >
                 <Checkbox
                   checked={check}
                   onChange={e => this.props.goodStore.innerCheck(e, outIndex, innerIndex)}
                 />
                 <div className="flex_lr_fs_c info_item">
-                  <img src={pic} alt="" />
+                  <img src={fsImgUrl || pic} alt="" />
                   <div className="flex_tb_sb_n infos">
-                    <p>{name}</p>
+                    <p>{fsMaterialName}</p>
                     <div className="flex_lr_sb_n">
-                      <p>${money}/{until}</p>
+                      <p>${fdSalePrice * fdSaleUnitRate}/{fsSaleUnitName}</p>
                       <ARButton
                         count={count}
                         addFunc={() => this.changeGood(materialItem, 1, outIndex, innerIndex)}

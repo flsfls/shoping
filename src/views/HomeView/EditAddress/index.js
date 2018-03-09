@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Toast } from 'antd-mobile';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
-import { post, get } from '@util/http';// eslint-disable-line
+import { post } from '@util/http';// eslint-disable-line
 import { validationAddress } from '@util/homeViewModule'; // eslint-disable-line
 import AddressEdit from '../components/AddressEdit';
 import HomeNavBar from '@components/NavBar';  // eslint-disable-line
@@ -14,24 +14,15 @@ import './assets/style.less';
 })) @observer
 class EditAddress extends React.Component {
   state = {
-    shopName: '', // 地址总部名称
-    telephone: '', // 地址电话
-    address: '', // 地址全称
+    fsReceiver: '', // 地址总部名称
+    fsCellphoneRr: '', // 地址电话
+    fsAddress: '', // 地址全称
   }
   /**
    * marjar function 通过收货地址跳转过来时传入的item，在loacation里的state取到，然后赋值给state
    */
   componentWillMount() {
-    const {
-      shopName,
-      telephone,
-      address,
-    } = this.props.location.state.item;
-    this.setState({
-      shopName,
-      telephone,
-      address,
-    });
+    this.setState({ ...this.props.location.state.item });
   }
 
   /**
@@ -53,29 +44,24 @@ class EditAddress extends React.Component {
    * 最后都返回到收货地址页
    */
   editAddress = (flag) => {
-    const { _id } = this.props.location.state.item;
+    const { fiAddrId } = this.props.location.state.item;
     if (flag === 'edit') {
       const validateFlag = validationAddress(this.state);
       if (!validateFlag) return;
-      post('api/address/modifyAddress', {}, { id: _id, ...this.state }).then(() => {
-        this.props.infoStore.editAddress(_id, this.state);
+      post('wap/deliverAddr/update', {}, { fiAddrId, ...this.state }).then(() => {
+        this.props.infoStore.editAddress(fiAddrId, this.state);
         Toast.info('修改成功', 1);
+        this.props.history.goBack();
       });
     } else {
-      get('api/address/removeAddress', { id: _id }).then((res) => {
-        console.log(res);
+      post('wap/deliverAddr/delete', { fiAddrId }).then(() => {
+        Toast.info('删除成功', 1);
+        this.props.infoStore.deleteAddress(fiAddrId);
+        this.props.history.goBack();
       });
-      Toast.info('删除成功', 1);
-      this.props.infoStore.deleteAddress(_id);
     }
-    this.props.history.goBack();
   }
   render() {
-    const {
-      shopName,
-      telephone,
-      address,
-    } = this.state;
     return (
       <div className="inner_body edit_address">
         <HomeNavBar
@@ -83,9 +69,7 @@ class EditAddress extends React.Component {
           path="/home/shopCard/orderConfirm/recevieAddress"
         />
         <AddressEdit
-          shopName={shopName}
-          telephone={telephone}
-          address={address}
+          {...this.state}
           onChange={this.onChange}
         />
         <Button

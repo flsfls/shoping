@@ -19,7 +19,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTab: 'receiveOrder', // 选中的当前table
+      selectedTab: 'goodOrder', // 选中的当前table
       open: false, // 分类的slidebar是否在打开状态
     };
   }

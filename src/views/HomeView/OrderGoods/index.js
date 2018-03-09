@@ -6,7 +6,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import OrderList from './component/orderList';
 import Scroll from './component/scroll';
 import Header from './component/header'; // eslint-disable-line
-import { get } from '@util/http'; // eslint-disable-line
+import { post } from '@util/http'; // eslint-disable-line
 import './assets/style.less';
 
 @inject(store => ({
@@ -57,13 +57,18 @@ class OrderGoods extends React.Component {
       hasMore: false,
     });
     // 向后台发送请求
-    get('api/shop/getshop', { pageSize, pageNum }).then(({ data }) => {
+    post('wap/quickordergoods/materiel', {}, {
+      fsTreeItemId: 'all', // 困定死
+      pageSize,
+      pageNum,
+      fsTreeItemType: 'Material', // 困定死
+    }).then(({ data }) => {
       // 关闭toast
       Toast.hide();
       // isHasMore是一个总输纽，当请求来的数据长度大于等于页数的长度，说明后台还有更多的数据，则返回true
-      const isHasMore = data.length >= pageSize;
+      const isHasMore = data.colContent.length >= pageSize;
       // 通过addGoodList方法把请求来的数据放入的到mobx中的goodList中
-      goodStore.addGoodList(data);
+      goodStore.addGoodList(data.colContent);
       this.setState({
         pageNum: pageNum + (isHasMore ? 1 : 0), // 如果有更多数据，则把页码加1
         hasMore: isHasMore, // 是否还可以继续加载能过isHasMore来进行判断
@@ -106,7 +111,7 @@ class OrderGoods extends React.Component {
               <OrderList
                 index={index}
                 item={item}
-                key={item.get('_id')}
+                key={item.get('fsMaterialGuId')}
               />
             ))}
           </div>

@@ -22,7 +22,7 @@ class ShopStore {
       good.get('material').forEach((materialItem) => {
         // 如果是购选的则把这个钱给加上去
         if (materialItem.get('check') === true) {
-          money += materialItem.get('count') * materialItem.get('money');
+          money += materialItem.get('count') * (materialItem.get('fdSalePrice') * materialItem.get('fdSaleUnitRate'));
         }
       });
     });
@@ -49,8 +49,8 @@ class ShopStore {
            * @constant  storeId 存储物料中循环的当前id
            * @constant  storeCount 存储物料中循环的当前数量
            */
-          const goodId = this.goodList.getIn([i, '_id']);
-          const storeId = this.goodListStore.getIn([j, '_id']);
+          const goodId = this.goodList.getIn([i, 'fsMaterialGuId']);
+          const storeId = this.goodListStore.getIn([j, 'fsMaterialGuId']);
           const storeCount = this.goodListStore.getIn([j, 'count']);
           // 如果下拉数据中的id === 存储物料中循环的当前id
           if (goodId === storeId) {
@@ -95,9 +95,9 @@ class ShopStore {
        * 如果数量==1 并且是减少操作，则把当前物料从储存物料数组中删除 把操作的储存物料存在localStorage中
        */
       for (let i = 0; i < this.goodListStore.size; i += 1) {
-        const goodListStoreId = this.goodListStore.getIn([i, '_id']);
+        const goodListStoreId = this.goodListStore.getIn([i, 'fsMaterialGuId']);
         const goodListStoreCount = this.goodListStore.getIn([i, 'count']);
-        if (goodListStoreId === good.get('_id')) {
+        if (goodListStoreId === good.get('fsMaterialGuId')) {
           if (goodListStoreCount === 1 && flag === -1) {
             this.goodListStore = this.goodListStore.splice(i, 1);
             localStorage.goodListStore = JSON.stringify(this.goodListStore);
@@ -133,10 +133,10 @@ class ShopStore {
        * @constant goodlistItemCount {number} 物料中的选中数量
        */
       const goodlistItem = this.goodList.get(i);
-      const goodlistItemId = goodlistItem.get('_id');
+      const goodlistItemId = goodlistItem.get('fsMaterialGuId');
       const goodlistItemCount = goodlistItem.get('count');
       // 如果传入的选中物料主健id 等于 循环出来的物料主健_id值,则下拉物料数组中比对成功的加1或1，退出循环
-      if (goodlistItemId === good.get('_id')) {
+      if (goodlistItemId === good.get('fsMaterialGuId')) {
         this.goodList = this.goodList.setIn([i, 'count'], goodlistItemCount + flag);
         break;
       }
@@ -160,11 +160,12 @@ class ShopStore {
       const item = next;
       // 把每个item加上一个check属性为true
       item.check = true;
-      const { shopName, shopId } = item;
+      // fsSupplierName 供应商名， fsSupplierId 供应商id
+      const { fsSupplierName, fsSupplierId } = item;
       // 把obj进行一个整合
       const obj = {
-        shopName,
-        shopId,
+        fsSupplierName,
+        fsSupplierId,
         check: true,
         material: [item],
       };
@@ -175,7 +176,7 @@ class ShopStore {
         // 否则开始循环box
         for (let i = 0; i < box.length; i += 1) {
           // 如果下一个item的shopid 等于其实中的一个id
-          if (box[i].shopId === item.shopId) {
+          if (box[i].fsSupplierId === item.fsSupplierId) {
             // 把item push到其实中的一个物料组中
             const materialItem = box[i].material;
             materialItem.push(item);
@@ -293,15 +294,17 @@ class ShopStore {
     const fromClassfi = classfi;
     // 循环请求来的分类数据，然和再循环goodListStore选中的的物料
     for (let i = 0; i < fromClassfi.length; i += 1) {
+      // 都加上一个数量
+      fromClassfi[i].count = 0;
       for (let j = 0; j < this.goodListStore.size; j += 1) {
         /**
           * @constant goodListStoreId 存储选中物料的每一项id
           * @constant goodListStoreId 存储选中物料的每一项id
           */
-        const goodListStoreId = this.goodListStore.getIn([j, '_id']);
+        const goodListStoreId = this.goodListStore.getIn([j, 'fsMaterialGuId']);
         const goodListStoreCount = this.goodListStore.getIn([j, 'count']);
         // 如果每一项分类id等于存储选中物料的每一项id，则改变分类其中的数量，做一个比对
-        if (fromClassfi[i]._id === goodListStoreId) {
+        if (fromClassfi[i].fsMaterialGuId === goodListStoreId) {
           fromClassfi[i].count = goodListStoreCount;
           break;
         }
@@ -309,11 +312,12 @@ class ShopStore {
     }
     // 再进行一个数据展示的格式化物料分类组
     const groupClass = fromClassfi.reduce((totalClassfi, item) => {
-      const { classifId, classifName } = item;
+      // fsTreeCode 大分类代码， fsTreeName大分类名
+      const { fsTreeCode, fsTreeName } = item;
       // 整合物料组的每一项
       const obj = {
-        classifId,
-        classifName,
+        fsTreeCode,
+        fsTreeName,
         material: [item],
       };
       // 如果物料组的长度为0
@@ -324,7 +328,7 @@ class ShopStore {
         // 再循环物料组
         for (let i = 0; i < totalClassfi.length; i += 1) {
           // 如果物料组和当前比对的物料id一样的话
-          if (totalClassfi[i].classifId === item.classifId) {
+          if (totalClassfi[i].fsTreeCode === item.fsTreeCode) {
             // 把当前比对的物料添加到物料组的物料中
             const materialItem = totalClassfi[i].material;
             materialItem.push(item);
@@ -368,16 +372,17 @@ class ShopStore {
     const searchStore = search;
     // 循环请求来数据
     for (let i = 0; i < searchStore.length; i += 1) {
+      searchStore[i].count = 0;
       // 再循环选中的数据例表
       for (let j = 0; j < this.goodListStore.size; j += 1) {
         /**
          * @constant {id} goodListStoreId 当前循环的选中的存储数据id
          * @constant {id} goodListStoreId 当前循环的选中的存储数据的数量
          */
-        const goodListStoreId = this.goodListStore.getIn([j, '_id']);
+        const goodListStoreId = this.goodListStore.getIn([j, 'fsMaterialGuId']);
         const goodListStoreCount = this.goodListStore.getIn([j, 'count']);
         // 如果搜索的数据id === 等于当前循环的选中的存储数据id
-        if (searchStore[i]._id === goodListStoreId) {
+        if (searchStore[i].fsMaterialGuId === goodListStoreId) {
           // 把当前数量改变
           searchStore[i].count = goodListStoreCount;
           break;

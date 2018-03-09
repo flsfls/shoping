@@ -16,7 +16,7 @@ class ARButton extends React.Component {
       count,
     } = this.props;
     return (
-      <div className="flex_lr_c_c arbutton">
+      <div className="flex_lr_fe_c arbutton">
         {
           count > 0 ?
             [

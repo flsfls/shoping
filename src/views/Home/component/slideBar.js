@@ -1,38 +1,67 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Drawer } from 'antd-mobile';
+import { post } from '@util/http'; // eslint-disable-line
 import CustomIcon from '@components/CustomIcon'  // eslint-disable-line
 
-@withRouter
+@withRouter @inject(store => ({
+  puchaseStore: store.puchaseStore,
+})) @observer
 class SlideBar extends React.Component {
+  state = {
+    shop: [],
+  }
+  componentWillMount() {
+    // 向后台发送请求，请求供应商例表
+    post('wap/quickordergoods/index').then(({ data }) => {
+      // 通过过滤只拿到fsTreeItemId为33的总部，暂时只有这个
+      let shop = data.filter((item) => {
+        const { fsTreeItemId } = item;
+        // 通过过滤暂时只取id为33的供应商
+        return fsTreeItemId === '33';
+      });
+      // 然后把总部所有供应商给提取出来成一个list
+      shop = shop[0].data.map(({
+        fullName,
+        fsShopGUID,
+        value,
+        label,
+      }) => ({
+        fullName,
+        fsShopGUID,
+        value,
+        label,
+      }));
+      this.setState({
+        shop,
+      });
+      // 再传入到puchaseStore中，在后面采购订单和入库需要添写
+      this.props.puchaseStore.addFsSupplierList(shop);
+    });
+  }
   /**
-   * @param {String}  shopId 供应商门主店的id
+   * @param {String}  fsShopGUID 供应商门主店的id
    * @method onOpenChange 父组件传入改变slidebar的toggle
    * @description 当点击slidebar里供应商的分类门店时，跳到分类页面，把当前店铺id保存到session中，再调用onOpenChange关闭slidebar
    */
-  goClassification = (shopId) => {
+  goClassification = (fsShopGUID) => {
     this.props.onOpenChange();
-    sessionStorage.shopId = shopId;
+    sessionStorage.fsShopGUID = fsShopGUID;
+    sessionStorage.fsTreeItemId = '33';
     this.props.history.push('/home/classification');
   }
 
   render() {
-    // 这里的shop是假数据
-    const shop = [
-      { shopName: '小肥羊总部', shopId: '1' },
-      { shopName: '沙县大酒店总部', shopId: '2' },
-      { shopName: '新疆拉面总部', shopId: '3' },
-      { shopName: '光明顶总部', shopId: '4' },
-    ];
-    const slidebar = shop.map(item => (
+    const slidebar = this.state.shop.map(({ fullName, fsShopGUID }) => (
       <div
-        key={item.shopId}
-        onClick={() => this.goClassification(item.shopId)}
+        key={fsShopGUID}
+        onClick={() => this.goClassification(fsShopGUID)}
         className="flex_lr_fs_fs slide_bar"
       >
         <CustomIcon type="shop" size="xs" />
-        <span>{item.shopName}</span>
+        <span>{fullName}</span>
       </div>
     ));
     const { open } = this.props;
@@ -59,6 +88,14 @@ class SlideBar extends React.Component {
     );
   }
 }
+
+
+/**
+  * @param {mobx} goodStore mobx中的所有物料操作
+  */
+SlideBar.wrappedComponent.propTypes = {
+  puchaseStore: PropTypes.object.isRequired,
+};
 
 /**
  * @param {boolean}  open 初始化是否打开slidebar

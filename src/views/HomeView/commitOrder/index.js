@@ -1,24 +1,20 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
-import { Button, Toast } from 'antd-mobile';
+import { Button } from 'antd-mobile';
 import HomeNavBar from '@components/NavBar';  // eslint-disable-line
 import './asset/style.less';
 import Ok from './asset/commit.jpg';
 
-@inject(store => ({
-  goodStore: store.goodStore,
-})) @observer
+
 class CommitOrder extends React.Component {
   componentWillMount() {
-    // will did
-    this.money = this.props.location.state.money;
+    // 后台最后完成的总价 结和各种税率
+    this.fdPurchaseTotAmt = this.props.location.state.fdPurchaseTotAmt;
+    // 后台返回的订单号list
+    this.fsPurchaseGUIDList = this.props.location.state.fsPurchaseGUIDList;
   }
 
   completeOrder = () => {
-    this.props.goodStore.cleanGoodListStore();
-    localStorage.removeItem('goodListStore');
-    Toast.info('订单提交成功', 1);
     this.props.history.go(-3);
   }
 
@@ -34,12 +30,16 @@ class CommitOrder extends React.Component {
           <div className="content">
             <div className="flex_lr_sb_fs">
               <p className="left">网上单号</p>
-              <p className="right">20171002002424</p>
+              <div>
+                {this.fsPurchaseGUIDList.map((item, index) => (
+                  <p className="right" key={index}>{item}</p>
+                ))}
+              </div>
             </div>
             <span className="commit_line" />
             <div className="flex_lr_sb_fs order_money">
               <p className="left">订单金额</p>
-              <p className="right_money">¥{this.money}</p>
+              <p className="right_money">¥{this.fdPurchaseTotAmt}</p>
             </div>
             <Button onClick={this.completeOrder}>完成</Button>
           </div>
@@ -48,14 +48,6 @@ class CommitOrder extends React.Component {
     );
   }
 }
-
-
-/**
-  * @param {mobx} goodStore mobx中的所有物料操作
-  */
-CommitOrder.wrappedComponent.propTypes = {
-  goodStore: PropTypes.object.isRequired,
-};
 
 
 CommitOrder.propTypes = {

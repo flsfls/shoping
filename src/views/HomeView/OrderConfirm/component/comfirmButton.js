@@ -1,16 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 
-@withRouter
+@withRouter @inject(store => ({
+  goodStore: store.goodStore,
+})) @observer
 class TotalButton extends React.Component {
   componentDidMount() {
     // will did
   }
+
   commitOrder = () => {
-    this.props.commitOrder().then(() => {
+    // 提交订单
+    this.props.commitOrder().then(({ data }) => {
+      /**
+       * @constant  fdPurchaseTotAmt 提交定单后返回的订单价格
+       * @constant  fsPurchaseGUIDList 提交定单后返回的订单流水号
+       */
+      const { fdPurchaseTotAmt, fsPurchaseGUIDList } = data;
+      this.props.goodStore.cleanGoodListStore();
+      localStorage.removeItem('goodListStore');
       this.props.history.push('/home/shopCard/orderConfirm/commitOrder', {
-        money: this.props.money,
+        fdPurchaseTotAmt,
+        fsPurchaseGUIDList,
       });
     });
   }
@@ -27,6 +40,12 @@ class TotalButton extends React.Component {
   }
 }
 
+/**
+  * @param {mobx} goodStore mobx中的所有物料操作
+  */
+TotalButton.wrappedComponent.propTypes = {
+  goodStore: PropTypes.object.isRequired,
+};
 TotalButton.propTypes = {
   history: PropTypes.object,
   money: PropTypes.number.isRequired,

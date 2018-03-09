@@ -14,8 +14,10 @@ class ShopList extends React.Component {
     // will did
   }
   render() {
+    // 拿到goupStore组合后的数据
     const { groupStore } = this.props.goodStore;
     let copyGoodStore = groupStore;
+    // 过滤组合里数据，如果没有选中的，则去除
     copyGoodStore.forEach((goods, index) => {
       const newGoods = goods.get('material').filter((materialItem) => {
         if (materialItem.get('check')) {
@@ -23,6 +25,7 @@ class ShopList extends React.Component {
         }
         return false;
       });
+      // 重新设置每一项的组合后的数据
       copyGoodStore = copyGoodStore.setIn([index, 'material'], newGoods);
     });
     return (
@@ -33,26 +36,26 @@ class ShopList extends React.Component {
         />
         <div className="scroll_body list_container">
           {
-            copyGoodStore.toJS().map(({ shopName, material, shopId }) => (
-              <div className="list_item" key={shopId} >
+            copyGoodStore.toJS().map(({ fsSupplierName, material, fsSupplierId }) => (
+              <div className="list_item" key={fsSupplierId} >
                 <div className="flex_lr_sb_c item_header">
                   <div className="flex_lr_fs_c">
                     <CustomIcon type="shop" size="xxs" />
-                    <span>{shopName}</span>
+                    <span>{fsSupplierName}</span>
                   </div>
                   <p>共{material.length}件</p>
                 </div>
                 {
                   material.map(({
-                    img,
-                    name,
+                    fsImgUrl,
+                    fsMaterialName,
                     count,
-                    _id,
+                    fsMaterialGuId,
                   }) => (
-                    <div className="flex_lr_sb_fs item_body" key={_id} >
+                    <div className="flex_lr_sb_fs item_body" key={fsMaterialGuId} >
                       <div className="flex_lr_sb_fs item_inner">
-                        <img src={img} alt="" />
-                        <span className="body_content">{name}</span>
+                        <img src={fsImgUrl} alt="" />
+                        <span className="body_content">{fsMaterialName}</span>
                       </div>
                       <span className="body_count">x{count}</span>
                     </div>

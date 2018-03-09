@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject, observer } from 'mobx-react';
 import { DatePicker, Picker } from 'antd-mobile';
 import CustomIcon from '@components/CustomIcon';  // eslint-disable-line
 import OrderSlideBar from '@components/OrderSlideBar'; // eslint-disable-line
 
-
+@inject(store => ({
+  puchaseStore: store.puchaseStore,
+})) @observer
 class SlideBar extends React.Component {
   constructor(props) {
     super(props);
@@ -15,10 +18,10 @@ class SlideBar extends React.Component {
     const nowTimeStamp = Date.now() + (1000 * 60 * 60 * 24);
     const now = new Date(nowTimeStamp);
     this.state = {
-      startProtTime: now,
-      endPortTime: now,
-      recevieTime: now,
-      pickerValue: '',
+      fsBillDateStart: now, // 开始单据日期
+      fsBillDateEnd: now, // 结束单据日期
+      fsArrivalDate: now, // 到货日期
+      fsSupplier: '', // 供应商
       status: [
         { text: '全部', choose: false },
         { text: '已提交', choose: false },
@@ -42,7 +45,14 @@ class SlideBar extends React.Component {
       status: newStatus,
     });
   }
-
+  submit = () => {
+    // fsBillDateStart 开始单据日期
+    // fsBillDateEnd  结束单据日期
+    // fsArrivalDateEnd (string, optional): 到货日期结束
+    // fsArrivalDateStart (string, optional): 到货日期开始
+    // fiBillStatus 单据日期 全部 '' 已提交 1  未提交 0 已取消。。。
+    // fiStockClose 已入库 4
+  }
   cancel = () => {
     const cancelStatus = this.state.status.map((item) => {
       const listItem = item;
@@ -50,29 +60,20 @@ class SlideBar extends React.Component {
       return listItem;
     });
     this.setState({
-      startProtTime: '',
-      endPortTime: '',
-      recevieTime: '',
-      pickerValue: '',
+      fsBillDateStart: '',
+      fsBillDateEnd: '',
+      fsArrivalDate: '',
+      fsSupplier: '',
       status: cancelStatus,
     });
   }
   render() {
-    const shopName = [
-      {
-        label: '2013',
-        value: '2013',
-      },
-      {
-        label: '2014',
-        value: '2014',
-      },
-    ];
+    const { fsSupplierList } = this.props.puchaseStore;
     const {
-      recevieTime,
-      startProtTime,
-      endPortTime,
-      pickerValue,
+      fsBillDateStart,
+      fsBillDateEnd,
+      fsArrivalDate,
+      fsSupplier,
     } = this.state;
     const { open } = this.props;
     const OrderDate = ({ left, extra, onClick }) => (
@@ -90,25 +91,25 @@ class SlideBar extends React.Component {
           <DatePicker
             mode="date"
             title="开始单据日期"
-            value={startProtTime}
-            onChange={startProtTime => this.setState({ startProtTime })}
+            value={fsBillDateStart}
+            onChange={fsBillDateStart => this.setState({ fsBillDateStart })}
           >
             <OrderDate left="开始单据日期" />
           </DatePicker>
           <DatePicker
             mode="date"
             title="结束单据日期"
-            value={endPortTime}
-            onChange={endPortTime => this.setState({ endPortTime })}
+            value={fsBillDateEnd}
+            onChange={fsBillDateEnd => this.setState({ fsBillDateEnd })}
           >
             <OrderDate left="结束单据日期" />
           </DatePicker>
           <Picker
-            value={pickerValue}
-            onChange={v => this.setState({ pickerValue: v })}
+            value={fsSupplier}
+            onChange={v => this.setState({ fsSupplier: v })}
             title="请选择供应商"
             cols={1}
-            data={shopName}
+            data={fsSupplierList.toJS()}
             className="forss"
           >
             <OrderDate left="请选择供应商" />
@@ -117,8 +118,8 @@ class SlideBar extends React.Component {
           <DatePicker
             mode="date"
             title="到货日期"
-            value={recevieTime}
-            onChange={recevieTime => this.setState({ recevieTime })}
+            value={fsArrivalDate}
+            onChange={fsArrivalDate => this.setState({ fsArrivalDate })}
           >
             <OrderDate left="到货日期" />
           </DatePicker>
@@ -155,6 +156,12 @@ class SlideBar extends React.Component {
   }
 }
 
+/**
+  * @param {mobx} goodStore mobx中的所有物料操作
+  */
+SlideBar.wrappedComponent.propTypes = {
+  puchaseStore: PropTypes.object.isRequired,
+};
 /**
  * @param {boolean}  open 初始化是否打开slidebar
  * @param {object}  history 非路由组件，中的路由信息

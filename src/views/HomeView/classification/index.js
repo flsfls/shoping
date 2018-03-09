@@ -8,7 +8,7 @@ import Bscroll from 'better-scroll';
 import HomeNavBar from '@components/NavBar';  // eslint-disable-line
 import ClassfiItem from './component/classfiItem';
 import Search from '@homeView/Search'; // eslint-disable-line
-import { get } from '@util/http' // eslint-disable-line
+import { post } from '@util/http' // eslint-disable-line
 import './assets/style.less';
 
 @inject(store => ({
@@ -26,15 +26,19 @@ class Classification extends React.Component {
 
   componentDidMount() {
     // 先取到从slidebar点击进入的存的shopid
-    const { shopId } = sessionStorage;
+    const { fsTreeItemId } = sessionStorage;
     // 通过shopId 向后台请求分类数据
-    get('api/shop/getClassfiShop', { shopId }).then(({ data }) => {
+    post('wap/quickordergoods/materiel', {}, {
+      fsNodeCode: 'all', // 固定死
+      fsTreeItemId,
+      fsTreeItemType: 'Material', // 固定死
+    }).then(({ data }) => {
       // 请求完毕之后把loading要关闭
       this.setState({
         animating: false,
       });
       // 把整合后的物料转化成分类组
-      this.props.goodStore.addClassfiStore(data);
+      this.props.goodStore.addClassfiStore(data.colContent);
       // 计算每一个右边栏的分组的高度，然后添加到数组中
       this.calculateHeight();
       // 初始化的滚动设置
@@ -120,9 +124,9 @@ class Classification extends React.Component {
       this.listHeight.push(height);
     }
   }
-
+  // pathname: "/home/classification/search",
   searchDom = () => (
-    <Link to="/home/classification/search" key="first">
+    <Link key="first" to={{ pathname: '/home/classification/search', state: { hasPguid: true } }}>
       <span className="right_bar my_search_bar">
         搜索
       </span>
@@ -131,9 +135,9 @@ class Classification extends React.Component {
 
   render() {
     const { classfiStore } = this.props.goodStore;
-    const meunList = classfiStore.toJS().map(i => ({
-      classifId: i.classifId,
-      classifName: i.classifName,
+    const meunList = classfiStore.toJS().map(({ fsTreeName, fsTreeCode }) => ({
+      fsTreeCode,
+      fsTreeName,
     }));
     const { currentIndex } = this.state;
     return (
@@ -151,9 +155,9 @@ class Classification extends React.Component {
         <div className="menu_wrap" ref={(menu) => { this.menu = menu; }}>
           <ul>
             {
-              meunList.map((item, index) => (
+              meunList.map(({ fsTreeCode, fsTreeName }, index) => (
                 <li
-                  key={item.classifId}
+                  key={fsTreeCode}
                   className="meun-list-hook"
                   onClick={() => this.selectMenu(index)}
                   style={{
@@ -162,7 +166,7 @@ class Classification extends React.Component {
                     borderRight: index === currentIndex ? '1px solid #fff' : '0 solid #FF6050',
                   }}
                 >
-                  <span>{item.classifName}</span>
+                  <span>{fsTreeName}</span>
                 </li>
               ))
             }
@@ -172,11 +176,11 @@ class Classification extends React.Component {
           <ul>
             {
               classfiStore.map((item, outIndex) => (
-                <li className="warp_li food-list-hook" key={item.get('classifId')} >
-                  <p className="classfi_name">{item.get('classifName')}</p>
+                <li className="warp_li food-list-hook" key={item.get('fsTreeCode')} >
+                  <p className="classfi_name">{item.get('fsTreeName')}</p>
                   <ul className="classfi_item_box">
                     {item.get('material').map((material, innerIndex) => (
-                      <div key={material.get('_id')}>
+                      <div key={material.get('fsMaterialGuId')}>
                         <ClassfiItem
                           material={material}
                           outIndex={outIndex}

@@ -11,26 +11,30 @@ class OrderList extends React.Component {
   }
   render() {
     const {
-      info,
-      money,
-      orderId,
-      shopName,
-      time,
+      text,
+      color,
+      fiId,
+      fsPurchaseGUID,
+      fdPurchaseTotAmt,
+      fsSupplierName,
+      ifsArrivalDate,
     } = this.props.orderItem;
     return (
       <ul>
         <li className="c_order_list">
           <p className="first flex_lr_sb_c">
-            <span>{shopName}</span>
-            <span>{info}</span>
+            <span>{fsSupplierName}</span>
+            <span style={{ color: color }}>{text}</span>
           </p>
           <p className="second flex_lr_sb_c">
-            <span>{orderId}</span>
-            <span>{formatDateTime(time, 'dot')}</span>
+            <span>{fsPurchaseGUID}</span>
+            <span>{ifsArrivalDate}</span>
           </p>
           <p className="third flex_lr_sb_c">
-            <span>确认入库</span>
-            <span>¥{money}</span>
+            <span className="fdPurchaseTotAmt">¥{fdPurchaseTotAmt}</span>
+            {
+              text === '已提交-已确认' ? <span className="confirm">确认入库</span> : null
+            }
           </p>
         </li>
       </ul>

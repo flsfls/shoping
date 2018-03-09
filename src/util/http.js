@@ -30,9 +30,10 @@ export const post = (url, params, datas) =>
   new Promise((resolve, reject) => {
     axios.post(parseUrl(url, params), datas)
       .then(({ data }) => {
-        if (data && data.success === true) {
+        if (data && (data.success === true || data.code === 200)) {
           resolve(data);
         } else {
+          Toast.fail(data.message);
           reject(data);
         }
       }).catch(reject);

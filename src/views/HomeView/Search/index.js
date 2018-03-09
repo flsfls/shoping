@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchHeader from './component/searchHeader';
-import { get } from '@util/http';  // eslint-disable-line
+import { post } from '@util/http';  // eslint-disable-line
 import SearchList from './component/searchList';
 import HomeNavBar from '@components/NavBar';  // eslint-disable-line
 import './assets/style.less';
@@ -23,6 +23,8 @@ class Search extends React.Component {
   }
 
   componentDidMount() {
+    // 是否是从分类里进行搜索的标识
+    this.hasPugid = this.props.location.state.hasPguid;
     // 进行行一初始化的请求节流，一个闭包函数
     this.time = this.throttle(() => this.getFetchList('init'), 300);
     // 清除所有有searchStore中的数据
@@ -64,15 +66,25 @@ class Search extends React.Component {
     this.setState({
       hasMore: false,
     });
+    // 如果是从分类搜索的标识的话，取sessionStorage.fsShopGUID 否则为 ‘’
+    const fsShopGUID = this.hasPugid ? sessionStorage.fsShopGUID : '';
     // 向后台发送请求
-    get('api/shop/searchShop', { keyWord: value, pageSize, pageNum }).then(({ data }) => {
+    post('wap/quickordergoods/materiel', {}, {
+      fsNodeCode: 'all',
+      fsTreeItemId: '33',
+      fsTreeItemType: 'Material',
+      fsShopGUID,
+      keyWord: value,
+      pageSize,
+      pageNum,
+    }).then(({ data }) => {
       // 如果是flag是init说明是重新搜索了
       if (flag === 'init') {
         // 要清除所有有searchStore中的数据
         this.props.goodStore.cleanSearchStore();
       }
       // isHasMore是一个总输纽，当请求来的数据长度大于等于页数的长度，说明后台还有更多的数据，则返回true
-      const isHasMore = data.length >= pageSize;
+      const isHasMore = data.colContent.length >= pageSize;
       this.setState({
         pageNum: pageNum + (isHasMore ? 1 : 0), // 如果有更多数据，则把页码加1
         hasMore: isHasMore, // 是否还可以继续加载能过isHasMore来进行判断
@@ -82,7 +94,7 @@ class Search extends React.Component {
         endTip: isHasMore ? false : true, // eslint-disable-line
       });
       // 把请求来的数据比对后再添入SearchStore中
-      this.props.goodStore.addSearchStore(data);
+      this.props.goodStore.addSearchStore(data.colContent);
     });
   }
 
@@ -143,7 +155,7 @@ class Search extends React.Component {
                 searchStore.map((material, index) => (
                   <SearchList
                     material={material}
-                    key={material.get('_id')}
+                    key={material.get('fsMaterialGuId')}
                     index={index}
                   />
                 ))
@@ -161,5 +173,7 @@ class Search extends React.Component {
 Search.wrappedComponent.propTypes = {
   goodStore: PropTypes.object.isRequired,
 };
-
+Search.propTypes = {
+  location: PropTypes.object.isRequired,
+};
 export default Search;

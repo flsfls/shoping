@@ -114,7 +114,16 @@
       ]
     ]
   },
-  "proxy": "http://localhost:8000",
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:8000",
+      "changeOrgin": true
+    },
+    "/wap": {
+      "target": "http://scm.dev.51eparty.com",
+      "changeOrigin": true
+    }
+  },
   "eslintConfig": {
     "parser": "babel-eslint",
     "env": {
@@ -155,7 +164,14 @@
       "no-underscore-dangle": [
         0
       ],
-      "react/no-array-index-key": [0]
+      "react/no-array-index-key": [0],
+      "no-param-reassign": [0],
+      "linebreak-style": [
+        0
+      ],
+      "no-console": [
+          0
+      ]
     }
   }
 }

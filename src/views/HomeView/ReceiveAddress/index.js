@@ -23,16 +23,16 @@ class ReceiveAddress extends React.Component {
     * 两者都要通过调用formatAddressList方法去标识当时选中的地址项
     * 如果用户进行页面刷新mobx的数据会清空，则可以正常向后台请求
     */
-  componentWillMount() {
-    const { addressList } = this.props.infoStore;
-    if (addressList.size > 0) {
-      this.props.infoStore.addAddress(this.formatAddressList(addressList.toJS()));
-    } else {
-      get('api/address/getAddress').then(({ data }) => {
-        this.props.infoStore.addAddress(this.formatAddressList(data));
-      });
-    }
-  }
+  // componentWillMount() {
+  //   const { addressList } = this.props.infoStore;
+  //   if (addressList.size > 0) {
+  //     this.props.infoStore.addAddress(this.formatAddressList(addressList.toJS()));
+  //   } else {
+  //     get('api/address/getAddress').then(({ data }) => {
+  //       this.props.infoStore.addAddress(this.formatAddressList(data));
+  //     });
+  //   }
+  // }
   /**
     * @param data 数据（可能是请求来的列表数据，也有可能是当前mobx已经有的列表数据
     * @marjar function 通过上个订单确认页面带来id数据进行和请求来的地址列表进行比对，如果是已经有数据的则用已经有的数据进行对比
@@ -77,24 +77,24 @@ class ReceiveAddress extends React.Component {
         <div className="scroll_body receive_list">
           {addressList.toJS().map((item) => {
             const {
-              address,
-              telephone,
-              shopName,
-              _id,
-              check,
+              fsAddress, // 收货地址
+              fsCellphoneRr, // 收货人手机号码
+              fsReceiver, // 收货人
+              fiAddrId, // 地址唯一的id
+              fiDefault, // 是否选中或者可以理解为设置默认地址
             } = item;
             return (
-              <div className="flex_lr_sb_c list_item" key={_id}>
+              <div className="flex_lr_sb_c list_item" key={fiAddrId}>
                 <Checkbox
-                  checked={check}
+                  checked={fiDefault === 1}
                   onChange={() => this.changeAddress(item)}
                 />
                 <div className="item_info" onClick={() => this.changeAddress(item)}>
                   <p>
-                    <span>{shopName}</span>
-                    <span>{telephone}</span>
+                    <span>{fsReceiver}</span>
+                    <span>{fsCellphoneRr}</span>
                   </p>
-                  <p className="info_address">{address}</p>
+                  <p className="info_address">{fsAddress}</p>
                 </div>
                 <CustomIcon type="edit" onClick={() => this.goEditAddress(item)} />
               </div>

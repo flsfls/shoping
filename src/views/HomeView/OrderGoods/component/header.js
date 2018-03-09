@@ -19,7 +19,7 @@ class Header extends React.Component {
           <CustomIcon size="sm" type="another" />
           <span className="icon_text">分类</span>
         </div>
-        <Link to="/home/search">
+        <Link to={{ pathname: '/home/search', state: { hasPguid: false } }}>
           <div className="center">
             <div className="flex_lr_fs_c search_box">
               <CustomIcon size="xxs" type="searchs" />

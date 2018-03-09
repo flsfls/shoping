@@ -9,31 +9,31 @@ class AddressEdit extends React.Component {
   }
   render() {
     const {
-      shopName,
-      telephone,
-      address,
+      fsReceiver,
+      fsCellphoneRr,
+      fsAddress,
       onChange,
     } = this.props;
     return (
       <div className="add_info">
         <List>
           <InputItem
-            value={shopName}
+            value={fsReceiver}
             clear
             placeholder="请输入收货人姓名"
-            onChange={value => onChange(value, 'shopName')}
+            onChange={value => onChange(value, 'fsReceiver')}
           >收货人
           </InputItem>
           <InputItem
-            onChange={value => onChange(value, 'telephone')}
-            value={telephone}
+            onChange={value => onChange(value, 'fsCellphoneRr')}
+            value={fsCellphoneRr}
             clear
             placeholder="请输入收货人手机号码"
           >手机号码
           </InputItem>
           <TextareaItem
-            onChange={value => onChange(value, 'address')}
-            value={address}
+            onChange={value => onChange(value, 'fsAddress')}
+            value={fsAddress}
             title="收货地址"
             placeholder="请输入收货地址"
             data-seed="logId"
@@ -46,9 +46,9 @@ class AddressEdit extends React.Component {
 }
 
 AddressEdit.propTypes = {
-  shopName: PropTypes.string.isRequired,
-  telephone: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
+  fsReceiver: PropTypes.string.isRequired,
+  fsCellphoneRr: PropTypes.string.isRequired,
+  fsAddress: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
